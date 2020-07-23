@@ -2,9 +2,11 @@ package com.example.safestorage.services;
 
 import com.example.safestorage.models.Note;
 import com.example.safestorage.models.User;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
+@Service
 public class NoteServiceImpl implements NoteService {
     @Override
     public Collection<Note> getNotesByOwnerId(String id) {

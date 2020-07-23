@@ -45,8 +45,7 @@ public class User {
     public User() {
     }
 
-    public User(String id, String username, String passwordHash) {
-        this.id = id;
+    public User(String username, String passwordHash) {
         this.username = username;
         this.passwordHash = passwordHash;
     }

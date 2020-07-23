@@ -53,15 +53,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();//.authenticated()
                 //.and().httpBasic();
         http.headers().frameOptions().sameOrigin().and();
-        http.authorizeRequests()
+        /*http.authorizeRequests()
                 .antMatchers("").authenticated()
-                .and().httpBasic();
+                .and().httpBasic();*/
 
         http.csrf().disable();
         http.formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/j_spring_security_check")
-                .usernameParameter("email")
+                .permitAll()
+                //.loginPage("/login")
+                .loginProcessingUrl("/api/login")
+                .successForwardUrl( "/api/after-login" )
+                .usernameParameter("username")
                 .passwordParameter("password")
                 .permitAll();
         http.logout()
