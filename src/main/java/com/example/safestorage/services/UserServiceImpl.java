@@ -29,4 +29,9 @@ public class UserServiceImpl implements UserService {
     public void saveUser(User user) {
         template.save( user );
     }
+
+    @Override
+    public void removeUser(String username) {
+        template.remove( username );
+    }
 }

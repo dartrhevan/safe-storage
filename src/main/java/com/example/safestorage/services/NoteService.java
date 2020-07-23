@@ -8,6 +8,6 @@ import com.example.safestorage.models.User;
 import java.util.Collection;
 
 public interface NoteService {
-    Collection<Note> getNotesByOwnerId(String id);
+    //Collection<Note> getNotesByOwnerId(String id);
     void saveNote(Note note, User user);
 }

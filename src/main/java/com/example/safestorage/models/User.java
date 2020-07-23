@@ -1,8 +1,11 @@
 package com.example.safestorage.models;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Document
@@ -12,7 +15,7 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return id.equals( user.id ) &&
+        return (id == null && user.id == null || id.equals( user.id )) &&
                 username.equals( user.username ) &&
                 passwordHash.equals( user.passwordHash );
     }
@@ -54,4 +57,17 @@ public class User {
     private String id;
     private String username;
     private String passwordHash;
+
+    @DBRef
+    private List<Note> notes;
+
+    public List<Note> getNotes() {
+        if(notes == null)
+            notes = new ArrayList<>();
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
 }

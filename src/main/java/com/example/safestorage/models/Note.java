@@ -6,8 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Note {
 
-    public Note(String id, String header, String text) {
-        Id = id;
+    public Note( String header, String text) {
         this.header = header;
         this.text = text;
     }
