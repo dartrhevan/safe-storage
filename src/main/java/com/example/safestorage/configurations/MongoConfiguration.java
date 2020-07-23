@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-//@Configuration
+@Configuration
 public class MongoConfiguration {
 
     @Bean
@@ -16,6 +16,6 @@ public class MongoConfiguration {
 
     @Bean
     public MongoTemplate mongoTemplate() {
-        return new MongoTemplate(mongoClient(), "test");
+        return new MongoTemplate(mongoClient(), "safe-storage");
     }
 }

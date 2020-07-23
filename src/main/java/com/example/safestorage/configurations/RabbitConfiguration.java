@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 //@EnableRabbit
 //@Configuration
-@SuppressWarnings("SpringConfigurationProxyMethods")
+//@SuppressWarnings("SpringConfigurationProxyMethods")
 public class RabbitConfiguration {
     //Logger logger = Logger.getLogger(RabbitConfiguration.class);
 

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 
 @Service
-public class NoteServiceImpl implements NoteService {
+public class NoteServiceTestImpl implements NoteService {
     @Override
     public Collection<Note> getNotesByOwnerId(String id) {
         return null;
