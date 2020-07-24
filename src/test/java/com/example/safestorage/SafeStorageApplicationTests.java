@@ -2,12 +2,17 @@ package com.example.safestorage;
 
 import com.example.safestorage.models.Note;
 import com.example.safestorage.models.User;
+import com.example.safestorage.services.EncryptionServiceImpl;
 import com.example.safestorage.services.NoteService;
 import com.example.safestorage.services.UserService;
 import com.example.safestorage.services.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.Assert;
+
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 @SpringBootTest
 class SafeStorageApplicationTests {
@@ -54,4 +59,36 @@ class SafeStorageApplicationTests {
         noteService.removeNote( note, user );
     }
 
+    @Test
+    void encryptionSimpleTest() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        var secret = "sdw";
+        var encryptionService = new EncryptionServiceImpl( secret );
+        var source = "TRYTGUHJKNM";
+        var code = encryptionService.encrypt( source );
+        System.out.println(code);
+        assert !code.equals( source );
+        var source2 = encryptionService.decrypt( code );
+        assert source.equals( source2 );
+    }
+
+
+    @Test
+    void encryptionPerformanceTest() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        encryptIteration();
+        var begin =  System.currentTimeMillis();
+        for(var i = 0; i < 100; i++)
+            encryptIteration();
+        var end =  System.currentTimeMillis();
+        var time = end - begin;
+        assert time < 25;
+        System.out.println(time);
+    }
+
+    private void encryptIteration() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        var secret = "sdw";
+        var encryptionService = new EncryptionServiceImpl( secret );
+        var source = "TRYTGUHJKNM";
+        var code = encryptionService.encrypt( source );
+        var source2 = encryptionService.decrypt( code );
+    }
 }
