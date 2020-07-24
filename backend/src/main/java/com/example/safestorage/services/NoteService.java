@@ -10,7 +10,10 @@ import java.util.Collection;
 
 public interface NoteService {
     //Collection<Note> getNotesByOwnerId(String id);
-    void saveNote(Note note, User user);
-    void removeNote(Note note, User user);
+
+    void saveNote(Note note);
+
+    void removeNote(Note note);
+
     void editNote(Note newNote);
 }

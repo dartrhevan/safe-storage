@@ -25,17 +25,17 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public void saveNote(Note note, User user) {
-        user.getNotes().add( note );
+    public void saveNote(Note note) {
+        //user.getNotes().add( note );
         template.save( note );
-        template.save( user );
+        //template.save( user );
     }
 
     @Override
-    public void removeNote(Note note, User user) {
-        user.getNotes().remove( note );
+    public void removeNote(Note note) {
+        //user.getNotes().remove( note );
         template.remove( note );
-        template.remove( user );
+        //template.remove( user );
     }
 
     @Override

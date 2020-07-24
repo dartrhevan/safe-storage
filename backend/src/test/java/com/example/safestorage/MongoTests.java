@@ -38,7 +38,7 @@ class MongoTests {
         assert pass.equals( entity.getPasswordHash() );
 
         //TODO: move to after test
-        userService.removeUser( user.getUsername() );
+        userService.removeUser( entity );
     }
 
     @Test
@@ -55,8 +55,8 @@ class MongoTests {
         assert name.equals( entity.getUsername() );
         assert entity.getNotes().get( 0 ).getText().equals( note.getText() );
         //TODO: move to after test
-        userService.removeUser( user.getUsername() );
-        noteService.removeNote( note, user );
+        userService.removeUser( entity );
+        noteService.removeNote( entity.getNotes().get( 0 ), user );
     }
 
     @Test
@@ -76,9 +76,24 @@ class MongoTests {
         var entity2 = template.findOne( query, User.class );// userService.findUserByName( name );
         assert entity2.getNotes().get( 0 ).getText() == null;
         //TODO: move to after test
-        userService.removeUser( user.getUsername() );
+        userService.removeUser( entity );
         noteService.removeNote( note, user );
     }
 
+    @Test
+    void mongoExcludeTest2() {
+        var name = "dsad";
+        var pass = "ewf";
+        var user = new User(name, pass);
+        userService.saveUser( user );
+        var query = new Query();
+        var entity = template.findOne( query, User.class );// userService.findUserByName( name );
+        query.fields().exclude( "username" );
+        assert entity.getUsername().equals( name );
+        var entity2 = template.findOne( query, User.class );// userService.findUserByName( name );
+        assert entity2.getUsername() == null;
+        //TODO: move to after test
+        userService.removeUser( entity );
+    }
 
 }

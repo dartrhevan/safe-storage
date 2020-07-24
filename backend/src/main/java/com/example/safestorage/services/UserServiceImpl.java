@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void removeUser(String username) {
-        template.remove( username );
+    public void removeUser(User user) {
+        template.remove( user );
     }
 }

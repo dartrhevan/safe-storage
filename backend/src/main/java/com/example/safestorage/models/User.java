@@ -57,7 +57,7 @@ public class User {
     private String id;
     private String username;
     private String passwordHash;
-
+/*
     @DBRef
     private List<Note> notes;
 
@@ -69,5 +69,5 @@ public class User {
 
     public void setNotes(List<Note> notes) {
         this.notes = notes;
-    }
+    }*/
 }

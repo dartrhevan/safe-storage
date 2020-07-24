@@ -2,18 +2,27 @@ package com.example.safestorage.controllers;
 
 import com.example.safestorage.models.Note;
 import com.example.safestorage.models.NoteDTO;
+import jdk.jshell.spi.ExecutionControl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RequestMapping("/api/note")
 @RestController
 public class NoteController {
 
-    @GetMapping
-    public void getNotes(Principal user) {
+    @GetMapping("/list")
+    public List<Note> getNotes(Principal user) {
         //TODO: enqueue get message
+        return null;
+    }
+
+    @GetMapping("/{id}")
+    public Note getNote(@PathVariable("id") String id, Principal user) {
+        //TODO: enqueue get message
+        return null;
     }
 
     @PostMapping
@@ -26,8 +35,8 @@ public class NoteController {
         //TODO: enqueue edit note
     }
 
-    @DeleteMapping
-    public void removeNote(@RequestParam String id, Principal user) {
+    @DeleteMapping("/{id}")
+    public void removeNote(@PathVariable("id") String id, Principal user) {
         //TODO: enqueue remove note
     }
 }

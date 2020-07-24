@@ -55,4 +55,13 @@ public class Note {
     private String Id;
     private String header;
     private String text;
+    private String ownerId;
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
 }

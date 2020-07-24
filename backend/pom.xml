@@ -66,6 +66,13 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <excludes>
+                    <exclude>../frontend/node_modules/**/*.*</exclude>
+                </excludes>
+            </resource>
+        </resources>
     </build>
 
 </project>
