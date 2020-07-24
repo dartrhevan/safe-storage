@@ -3,10 +3,27 @@ package com.example.safestorage.models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Objects;
+
 @Document
 public class Note {
 
-    public Note( String header, String text) {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Note)) return false;
+        Note note = (Note) o;
+        return Objects.equals( Id, note.Id ) &&
+                header.equals( note.header ) &&
+                text.equals( note.text );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash( Id, header, text );
+    }
+
+    public Note(String header, String text) {
         this.header = header;
         this.text = text;
     }

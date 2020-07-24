@@ -5,9 +5,9 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 
-@EnableRabbit //нужно для активации обработки аннотаций @RabbitListener
+//@EnableRabbit //нужно для активации обработки аннотаций @RabbitListener
 @Component
-public class MyListener {
+public class Listeners {
 
     @RabbitListener(queues = "queue4")
     public void processQueue1(String message) {

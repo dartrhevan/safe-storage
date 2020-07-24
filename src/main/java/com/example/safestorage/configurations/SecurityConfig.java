@@ -1,6 +1,7 @@
 package com.example.safestorage.configurations;
 
 //import com.numericalanalysis.numericalalanalysisbackend.services.UserDetailsServiceImpl;
+import com.example.safestorage.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.EnableCaching;
         import org.springframework.context.annotation.Configuration;
@@ -25,9 +26,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
 
     @Autowired
-
+*/
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;*/
+    private UserDetailsServiceImpl userDetailsService;
     // регистрируем нашу реализацию UserDetailsService
     // а также PasswordEncoder для приведения пароля в формат SHA1
 
@@ -41,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void registerGlobalAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        //auth.userDetailsService(userDetailsService).passwordEncoder( encoder );
+        auth.userDetailsService(userDetailsService).passwordEncoder( encoder );
     }
 
     @Override
@@ -70,9 +71,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // разрешаем делать логаут всем
                 .permitAll()
                 // указываем URL логаута
-                .logoutUrl("/logout")
+                .logoutUrl("/api/logout")
                 // указываем URL при удачном логауте
-                .logoutSuccessUrl("/login?logout")
+                //.logoutSuccessUrl("/login?logout")
                 // делаем не валидной текущую сессию
                 .invalidateHttpSession(true);
 

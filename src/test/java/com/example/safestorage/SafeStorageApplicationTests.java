@@ -50,7 +50,8 @@ class SafeStorageApplicationTests {
         var entity = userService.findUserByName( name );
         assert name.equals( entity.getUsername() );
         assert entity.getNotes().get( 0 ).getText().equals( note.getText() );
-        //userService.removeUser( user.getUsername() );
+        userService.removeUser( user.getUsername() );
+        noteService.removeNote( note, user );
     }
 
 }
