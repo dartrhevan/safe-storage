@@ -1,6 +1,6 @@
 package com.example.safestorage.services;
 
 public interface EncryptionService {
-    String encrypt(String source);
-    String decrypt(String source);
+    byte[] encrypt(String source);
+    String decrypt(byte[] source);
 }

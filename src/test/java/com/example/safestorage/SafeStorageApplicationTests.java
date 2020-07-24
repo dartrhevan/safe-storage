@@ -2,30 +2,44 @@ package com.example.safestorage;
 
 import com.example.safestorage.models.Note;
 import com.example.safestorage.models.User;
-import com.example.safestorage.services.EncryptionServiceImpl;
-import com.example.safestorage.services.NoteService;
-import com.example.safestorage.services.UserService;
-import com.example.safestorage.services.UserServiceImpl;
+import com.example.safestorage.services.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.util.Assert;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.zip.DataFormatException;
 
+// TODO: refactor - split to classes
 @SpringBootTest
 class SafeStorageApplicationTests {
 
     @Test
     void contextLoads() {
     }
-
+    //TODO: refactor change DI type
     @Autowired
     private NoteService noteService;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MongoTemplate template;
+
+    @Autowired
+    private CompressionService compressionService;
+
+    @Test
+    void noteTest() {
+        //template.getCollection( "user" ).aggregate( new ArrayList<>() {} )
+    }
 
     @Test
     void mongoSimpleTest() {
@@ -66,7 +80,7 @@ class SafeStorageApplicationTests {
         var source = "TRYTGUHJKNM";
         var code = encryptionService.encrypt( source );
         System.out.println(code);
-        assert !code.equals( source );
+        assert !(new String(code).equals( source ));
         var source2 = encryptionService.decrypt( code );
         assert source.equals( source2 );
     }
@@ -91,4 +105,14 @@ class SafeStorageApplicationTests {
         var code = encryptionService.encrypt( source );
         var source2 = encryptionService.decrypt( code );
     }
+
+    @Test
+    void compressionTest() throws IOException, DataFormatException {
+        var source = "djwnwejfewjklfewoifwekvnkjxinxiolcano eju3in839j2wiuen8fw id8948fg bjdvzhkewIUH2IUBh98";
+        var code = compressionService.compress( source.getBytes( StandardCharsets.UTF_8 ) );
+        assert source.getBytes().length >= code.length;
+        var decode = new String( compressionService.decompress( code ) );
+        assert decode.equals( source );
+    }
+
 }
