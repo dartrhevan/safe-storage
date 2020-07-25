@@ -40,7 +40,7 @@ class MongoTests {
         //TODO: move to after test
         userService.removeUser( entity );
     }
-
+/*
     @Test
     void mongoDBRefTest() {
         var name = "dsad";
@@ -58,28 +58,7 @@ class MongoTests {
         userService.removeUser( entity );
         noteService.removeNote( entity.getNotes().get( 0 ), user );
     }
-
-    @Test
-    void mongoExcludeTest() {
-        var name = "dsad";
-        var pass = "ewf";
-        var head = "grea";
-        var text = "ew";
-        var user = new User(name, pass);
-        userService.saveUser( user );
-        var note = new Note(head, text);
-        noteService.saveNote( note, user );
-        var query = new Query();
-        var entity = template.findOne( query, User.class );// userService.findUserByName( name );
-        assert entity.getNotes().get( 0 ).getText().equals( text );
-        query.fields().exclude( "notes.text" );
-        var entity2 = template.findOne( query, User.class );// userService.findUserByName( name );
-        assert entity2.getNotes().get( 0 ).getText() == null;
-        //TODO: move to after test
-        userService.removeUser( entity );
-        noteService.removeNote( note, user );
-    }
-
+*/
     @Test
     void mongoExcludeTest2() {
         var name = "dsad";

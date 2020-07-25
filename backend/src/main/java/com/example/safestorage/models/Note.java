@@ -3,6 +3,7 @@ package com.example.safestorage.models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
 import java.util.Objects;
 
 @Document
@@ -14,18 +15,20 @@ public class Note {
         if (!(o instanceof Note)) return false;
         Note note = (Note) o;
         return Objects.equals( Id, note.Id ) &&
-                header.equals( note.header ) &&
-                text.equals( note.text );
+                encodedHeader.equals( note.encodedHeader ) &&
+                encodedText.equals( note.encodedText );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash( Id, header, text );
+        return Objects.hash( Id, encodedHeader, encodedText );
     }
 
-    public Note(String header, String text) {
-        this.header = header;
-        this.text = text;
+    public Note(byte[] encodedHeader, byte[] encodedText, String ownerId, Date addingDate) {
+        this.encodedHeader = encodedHeader;
+        this.encodedText = encodedText;
+        this.ownerId = ownerId;
+        this.addingDate = addingDate;
     }
 
     public Note() {
@@ -35,27 +38,28 @@ public class Note {
         return Id;
     }
 
-    public String getHeader() {
-        return header;
+    public byte[] getEncodedHeader() {
+        return encodedHeader;
     }
 
-    public void setHeader(String header) {
-        this.header = header;
+    public void setEncodedHeader(byte[] encodedHeader) {
+        this.encodedHeader = encodedHeader;
     }
 
-    public String getText() {
-        return text;
+    public byte[] getEncodedText() {
+        return encodedText;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setEncodedText(byte[] encodedText) {
+        this.encodedText = encodedText;
     }
 
     @Id
     private String Id;
-    private String header;
-    private String text;
+    private byte[] encodedHeader;
+    private byte[] encodedText;
     private String ownerId;
+    private Date addingDate;
 
     public String getOwnerId() {
         return ownerId;
@@ -63,5 +67,17 @@ public class Note {
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public Date getAddingDate() {
+        return addingDate;
+    }
+
+    public void setAddingDate(Date addingDate) {
+        this.addingDate = addingDate;
+    }
+
+    public void setId(String id) {
+        Id = id;
     }
 }
