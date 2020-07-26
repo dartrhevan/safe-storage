@@ -3,17 +3,16 @@ package com.example.safestorage.services;
 import com.example.safestorage.models.Note;
 import com.example.safestorage.models.NoteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 
 @Service
-public class NoteEncoderServiceImpl implements NoteEncoderService {
+public class NoteEncoderImpl implements NoteEncoder {
 
     private final EncodingServiceImpl encodingService;
 
     @Autowired
-    public NoteEncoderServiceImpl(EncodingServiceImpl encodingService) {
+    public NoteEncoderImpl(EncodingServiceImpl encodingService) {
         this.encodingService = encodingService;
     }
 

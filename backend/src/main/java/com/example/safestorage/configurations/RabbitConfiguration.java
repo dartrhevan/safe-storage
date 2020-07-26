@@ -36,6 +36,7 @@ public class RabbitConfiguration {
         rabbitTemplate.setExchange("exchange-example-4");
         return rabbitTemplate;
     }
+
     @Bean
     public DirectExchange getDirectExchange(){
         return new DirectExchange("exchange-example-4");
@@ -62,5 +63,14 @@ public class RabbitConfiguration {
         return BindingBuilder.bind(getNoteQueue()).to( getDirectExchange()).with( "note");
     }
 
+    @Bean
+    public Queue getUserQueue() {
+        return new Queue("userQueue");
+    }
+
+    @Bean
+    public Binding getUserQueueBinding() {
+        return BindingBuilder.bind(getUserQueue()).to( getDirectExchange()).with( "getIdByUsername");
+    }
 
 }

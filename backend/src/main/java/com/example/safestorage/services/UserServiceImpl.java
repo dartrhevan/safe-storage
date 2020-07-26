@@ -26,12 +26,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(User user) {
-        template.save( user );
+    public void saveUser(User user) throws Exception {
+        var entity = template.findOne( Query.query( Criteria.where( "username" ).is(user.getUsername()) ), User.class );
+        if(entity == null)
+            template.save( user );
+        throw new Exception("Such user already exists");//TODO: replace with result
     }
 
     @Override
     public void removeUser(String username) {
         template.findAndRemove( Query.query( Criteria.where( "username" ).is( username )), Note.class );
+    }
+
+    @Override
+    public String getIdByUsername(String username) {
+        var user = template.findOne( Query.query( Criteria.where( "username" ).is(username) ), User.class );
+        if(user == null)
+            return null;
+        return user.getId();
     }
 }

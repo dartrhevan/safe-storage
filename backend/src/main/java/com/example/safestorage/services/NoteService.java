@@ -2,20 +2,20 @@ package com.example.safestorage.services;
 
 //import com.example.safestorage.models.Note;
 
+import com.example.safestorage.models.Note;
 import com.example.safestorage.models.NoteDTO;
 
 import java.util.List;
 
 public interface NoteService {
-    //Collection<Note> getNotesByOwnerId(String id);
 
-    void saveNote(NoteDTO note, String ownerId);
+    void saveNote(Note note);
 
     void removeNote(String noteId);
 
-    void editNote(NoteDTO newNote);
+    void editNote(Note newNote);
 
-    List<NoteDTO> listNotes(String userId);
+    List<Note> listNotes(String userId);
 
-    NoteDTO getNoteDetails(String noteId);
+    Note getNoteDetails(String noteId);
 }

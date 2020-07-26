@@ -21,7 +21,7 @@ public class NoteController {
     @GetMapping("/list")
     public List<Note> getNotes(Principal user) {
         //TODO: enqueue get message
-
+        //template.
         return null;
     }
 

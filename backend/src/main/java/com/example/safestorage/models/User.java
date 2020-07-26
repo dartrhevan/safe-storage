@@ -1,5 +1,6 @@
 package com.example.safestorage.models;
 
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
@@ -55,6 +56,7 @@ public class User {
 
     @Id
     private String id;
+    @Indexed(unique=true)
     private String username;
     private String passwordHash;
 /*
