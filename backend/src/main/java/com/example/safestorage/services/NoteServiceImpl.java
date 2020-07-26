@@ -15,22 +15,21 @@ import java.util.stream.Collectors;
 public class NoteServiceImpl implements NoteService {
 
     private final MongoTemplate template;
-    private final EncodingService encodingService;
+    private final NoteEncoderService encodingService;
 
     @Autowired
-    public NoteServiceImpl(MongoTemplate template, EncodingService encodingService) {
+    public NoteServiceImpl(MongoTemplate template, NoteEncoderService encodingService) {
         this.template = template;
         this.encodingService = encodingService;
     }
 
     @Override
-    public void saveNote(NoteDTO note, String ownerId) {
-        encodingService.setKey( ownerId );
-        template.save( new Note(encodingService.encode( note.getHead() ),
-                                    encodingService.encode( note.getText() ), ownerId, note.getDate()) );
+    public void saveNote(NoteDTO noteDTO, String ownerId) {
+        var note = encodingService.encode( noteDTO, ownerId );
+        template.save( note );
     }
 
-    @Override
+    @Override//fine!!!
     public void removeNote(String noteId) {
         //user.getNotes().remove( note );
         template.findAllAndRemove( Query.query( Criteria.where( "id" ).is( noteId ) ), Note.class );///remove( note );
@@ -38,29 +37,30 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public void editNote(NoteDTO newNote) {
+    public void editNote(NoteDTO newNote) {//change somehow??
         var note = template.findById( newNote.getId(), Note.class );
-        encodingService.setKey( note.getOwnerId() );
+        /*encodingService.setKey( note.getOwnerId() );
         note.setEncodedHeader( encodingService.encode( newNote.getHead() ) );
-        note.setEncodedText( encodingService.encode( newNote.getText()) );
+        note.setEncodedText( encodingService.encode( newNote.getText()) );*/
         //var note = new Note(encodingService.encode( newNote.getHead() ), encodingService.encode( newNote.getText()),
         //                   originalNote.getOwnerId(), newNote.getDate());
         //note.setId( originalNote.getId() );
-        template.save( note );
+        template.save( encodingService.encode( newNote, note.getOwnerId() ) );
     }
 
     @Override
     public List<NoteDTO> listNotes(String userId) {
         var query = Query.query( Criteria.where( "ownerId" ).is(userId));
-        encodingService.setKey( userId );
+        //encodingService.setKey( userId );
         query.fields().exclude( "text" ).exclude( "addingDate" );
-        return template.find( query, Note.class ).stream().map( n ->
-               new NoteDTO(encodingService.decode( n.getEncodedHeader() ),
-                  null, n.getId(), null) ).collect( Collectors.toList());
+        return template.find( query, Note.class ).stream().map( encodingService::decode//extract
+               /*new NoteDTO(encodingService.decode( n.getEncodedHeader() ),
+                  null, n.getId(), null)*/ ).collect( Collectors.toList());
     }
 
     @Override
     public NoteDTO getNoteDetails(String noteId) {
-        return null;//template.findOne( Query.query( Criteria.where( "id" ).is( noteId ) ), Note.class );
+        var note = template.findOne( Query.query( Criteria.where( "id" ).is( noteId ) ), Note.class );
+        return encodingService.decode(note);
     }
 }

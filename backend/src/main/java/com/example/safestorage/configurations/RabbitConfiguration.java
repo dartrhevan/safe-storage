@@ -7,13 +7,12 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
-//@EnableRabbit
-//@Configuration
+@EnableRabbit
+@Configuration
 //@SuppressWarnings("SpringConfigurationProxyMethods")
 public class RabbitConfiguration {
     //Logger logger = Logger.getLogger(RabbitConfiguration.class);
@@ -38,53 +37,30 @@ public class RabbitConfiguration {
         return rabbitTemplate;
     }
     @Bean
-    public DirectExchange directExchange(){
+    public DirectExchange getDirectExchange(){
         return new DirectExchange("exchange-example-4");
     }
 
     @Bean
-    public Queue myQueue4() {
-        return new Queue("queue4");
+    public Queue getEncodingQueue() {
+        return new Queue("encodingQueue");
+    }
+
+
+    @Bean
+    public Binding getEncodingQueueBinding() {
+        return BindingBuilder.bind(getEncodingQueue()).to( getDirectExchange()).with( "encoding");
     }
 
     @Bean
-    public Queue myQueue2() {
-        return new Queue("queue2");
+    public Queue getNoteQueue() {
+        return new Queue("noteQueue");
     }
 
     @Bean
-    public Queue myQueue3() {
-        return new Queue("queue3");
+    public Binding getNoteQueueBinding() {
+        return BindingBuilder.bind(getNoteQueue()).to( getDirectExchange()).with( "note");
     }
 
-    @Bean
-    public Binding Binding3(){
-        return BindingBuilder.bind(myQueue3()).to(directExchange()).with("route3");
-    }
 
-    @Bean
-    public Binding Binding4(){
-        return BindingBuilder.bind(myQueue4()).to(directExchange()).with("route4");
-    }
-
-    @Bean
-    public Binding Binding2(){
-        return BindingBuilder.bind(myQueue2()).to(directExchange()).with("route2");
-    }
-    /*
-    //объявляем контейнер, который будет содержать листенер для сообщений
-    @Bean
-    public SimpleMessageListenerContainer messageListenerContainer1() {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory());
-        container.setQueueNames("queue1");
-        container.setMessageListener(new MessageListener() {
-            //тут ловим сообщения из queue1
-            public void onMessage(Message message) {
-                System.out.println(new String(message.getBody()));
-                //logger.info("received from queue1 : " + new String(message.getBody()));
-            }
-        });
-        return container;
-    }*/
 }
