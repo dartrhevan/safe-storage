@@ -25,6 +25,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public void saveNote(NoteDTO note, String ownerId) {
+        encodingService.setKey( ownerId );
         template.save( new Note(encodingService.encode( note.getHead() ),
                                     encodingService.encode( note.getText() ), ownerId, note.getDate()) );
     }
@@ -38,17 +39,20 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public void editNote(NoteDTO newNote) {
-        var originalNote = template.findById( newNote.getId(), Note.class );
-        var note = new Note(encodingService.encode( newNote.getHead() ), encodingService.encode( newNote.getText()),
-                            originalNote.getOwnerId(), newNote.getDate());
-        note.setId( originalNote.getId() );
+        var note = template.findById( newNote.getId(), Note.class );
+        encodingService.setKey( note.getOwnerId() );
+        note.setEncodedHeader( encodingService.encode( newNote.getHead() ) );
+        note.setEncodedText( encodingService.encode( newNote.getText()) );
+        //var note = new Note(encodingService.encode( newNote.getHead() ), encodingService.encode( newNote.getText()),
+        //                   originalNote.getOwnerId(), newNote.getDate());
+        //note.setId( originalNote.getId() );
         template.save( note );
     }
 
     @Override
     public List<NoteDTO> listNotes(String userId) {
         var query = Query.query( Criteria.where( "ownerId" ).is(userId));
-
+        encodingService.setKey( userId );
         query.fields().exclude( "text" ).exclude( "addingDate" );
         return template.find( query, Note.class ).stream().map( n ->
                new NoteDTO(encodingService.decode( n.getEncodedHeader() ),

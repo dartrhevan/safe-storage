@@ -14,6 +14,7 @@ import java.util.Base64;
 @Service
 public class EncryptionServiceImpl implements EncryptionService {
 
+    @Override
     public void setKey(String myKey) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         //key = myKey.getBytes("UTF-8");
         var sha = MessageDigest.getInstance( "SHA-1" );
@@ -27,14 +28,6 @@ public class EncryptionServiceImpl implements EncryptionService {
 
     private byte[] key;
     private SecretKeySpec secretKey;
-
-    public EncryptionServiceImpl(String myKey) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        //key = myKey.getBytes("UTF-8");
-        var sha = MessageDigest.getInstance( "SHA-1" );
-        //key = sha.digest(myKey.getBytes("UTF-8"));
-        key = Arrays.copyOf( myKey.getBytes( StandardCharsets.UTF_8 ), 16 );
-        secretKey = new SecretKeySpec( key, "AES" );
-    }
 
     @Override
     public byte[] encrypt(String source) {

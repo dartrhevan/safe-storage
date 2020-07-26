@@ -1,5 +1,6 @@
 package com.example.safestorage.services;
 
+import com.example.safestorage.models.Note;
 import com.example.safestorage.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void removeUser(User user) {
-        template.remove( user );
+    public void removeUser(String username) {
+        template.findAndRemove( Query.query( Criteria.where( "username" ).is( username )), Note.class );
     }
 }

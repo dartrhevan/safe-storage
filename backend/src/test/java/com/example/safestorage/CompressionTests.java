@@ -1,6 +1,7 @@
 package com.example.safestorage;
 
 import com.example.safestorage.services.CompressionService;
+import com.example.safestorage.services.CompressionServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,12 +11,7 @@ import java.util.zip.DataFormatException;
 
 public class CompressionTests {
 
-    private final CompressionService compressionService;
-
-    @Autowired
-    public CompressionTests(CompressionService compressionService) {
-        this.compressionService = compressionService;
-    }
+    private final CompressionService compressionService = new CompressionServiceImpl();
 
     @Test
     void compressionTest() throws IOException, DataFormatException {
