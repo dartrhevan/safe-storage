@@ -21,7 +21,7 @@ public class RabbitConfiguration {
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory =
-                new CachingConnectionFactory("192.168.99.100");
+                new CachingConnectionFactory("192.168.99.100");//extract
         return connectionFactory;
     }
 
@@ -39,28 +39,39 @@ public class RabbitConfiguration {
 
     @Bean
     public DirectExchange getDirectExchange(){
-        return new DirectExchange("exchange-example-4");
+        return new DirectExchange("safe-storage-exchange");
     }
 
     @Bean
-    public Queue getEncodingQueue() {
-        return new Queue("encodingQueue");
+    public Queue getEncodeQueue() {
+        return new Queue("encodeQueue");
     }
 
 
     @Bean
-    public Binding getEncodingQueueBinding() {
-        return BindingBuilder.bind(getEncodingQueue()).to( getDirectExchange()).with( "encoding");
+    public Binding getEncodeQueueBinding() {
+        return BindingBuilder.bind(getEncodeQueue()).to( getDirectExchange()).with( "encode");
     }
 
     @Bean
-    public Queue getNoteQueue() {
-        return new Queue("noteQueue");
+    public Queue getDecodeQueue() {
+        return new Queue("decodeQueue");
+    }
+
+
+    @Bean
+    public Binding getDecodeQueueBinding() {
+        return BindingBuilder.bind(getDecodeQueue()).to( getDirectExchange()).with( "decode");
     }
 
     @Bean
-    public Binding getNoteQueueBinding() {
-        return BindingBuilder.bind(getNoteQueue()).to( getDirectExchange()).with( "note");
+    public Queue getSaveOrUpdateNoteQueue() {
+        return new Queue("saveOrUpdateNoteQueue");
+    }
+
+    @Bean
+    public Binding getSaveOrUpdateNoteQueueBinding() {
+        return BindingBuilder.bind(getSaveOrUpdateNoteQueue()).to( getDirectExchange()).with( "saveOrUpdateNote");
     }
 
     @Bean
@@ -73,4 +84,23 @@ public class RabbitConfiguration {
         return BindingBuilder.bind(getUserQueue()).to( getDirectExchange()).with( "getIdByUsername");
     }
 
+    @Bean
+    public Queue getRemoveNoteQueue() {
+        return new Queue("removeNoteQueue");
+    }
+
+    @Bean
+    public Binding getRemoveNoteQueueBinding() {
+        return BindingBuilder.bind(getRemoveNoteQueue()).to( getDirectExchange()).with( "removeNote");
+    }
+
+    @Bean
+    public Queue getNoteQueue() {
+        return new Queue("getNoteQueue");
+    }
+
+    @Bean
+    public Binding getNoteQueueBinding() {
+        return BindingBuilder.bind(getNoteQueue()).to( getDirectExchange()).with( "getNote");
+    }
 }
