@@ -34,22 +34,15 @@ public class Listeners {
     }
 
     //TODO: extract all keys to constants!
-    @RabbitListener(queues = "encoding")
-    public void handleEncodingQueueMessage(EncodingMessage message) {
-        switch (message.getAction()) {
-            case Encode -> {
-                var noteDTO = (NoteDTO)message.getData();
-                var userId = (String) template.convertSendAndReceive( "getIdByUsername", message.getUsername() );
-                var code = noteEncoder.encode( noteDTO, userId );
-                template.convertAndSend( "note", new NoteMessage( NoteAction.Save, code ));// saveOrUpdate???
-            }
-            case DecodeList -> {
+    @RabbitListener(queues = "decode")
+    public void handleDecodeQueueMessage(EncodeMessage message) {
+        switch (message.getDataType()) {
+            case List -> {
                 var noteList = (List<Note>) message.getData();
-
                 var result = noteList.stream().map(noteEncoder::decode);
                 //TODO: send somehow somewhere
             }
-            case DecodeNote -> {
+            case Note -> {
                 var note = (Note) message.getData();
                 var result = noteEncoder.decode( note );
                 //TODO: send somehow somewhere
@@ -58,35 +51,42 @@ public class Listeners {
         }
     }
 
-    @RabbitListener(queues = "note")
-    public void handleNoteQueueMessage(NoteMessage message) {
-        switch (message.getAction()) {
+
+    @RabbitListener(queues = "encode")
+    public void handleEncodeQueueMessage(DecodeMessage message) {
+        var noteDTO = message.getNote();
+        var userId = (String) template.convertSendAndReceive( "getIdByUsername", message.getUsername() );
+        var code = noteEncoder.encode( noteDTO, userId );
+        template.convertAndSend( "saveOrUpdateNote",  code );// saveOrUpdate???
+    }
+
+    @RabbitListener(queues = "getNote")
+    public void handleGetNoteQueueMessage(GetNoteMessage message) {
+        switch (message.getDataType()) {
             case List -> {
                 var userId = (String) template.convertSendAndReceive( "getIdByUsername", message.getData() );
                 var result = noteService.listNotes( userId );
-                template.convertAndSend( "encoding", new EncodingMessage(EncodingAction.DecodeList, result, (String) message.getData()));// saveOrUpdate???
+                template.convertAndSend( "decode", new EncodeMessage( DataType.List, result));// saveOrUpdate???
             }
-            case GetDetails -> {
-                var result = noteService.getNoteDetails( (String) message.getData() );
-                template.convertAndSend( "encoding", new EncodingMessage(EncodingAction.DecodeNote, result, null));// saveOrUpdate???
-            }
-            case Save -> {
-                noteService.saveNote( (Note) message.getData() );
-                //TODO: send somehow somewhere
-            }
-            case Edit -> //noinspection DuplicateBranchesInSwitch
-                    {
-                noteService.saveNote( (Note) message.getData() );
-                //TODO: send somehow somewhere
-            }
-            case Remove -> {
-                noteService.removeNote( (String) message.getData() );
-                //TODO: send somehow somewhere
+            case Note -> {
+                var result = noteService.getNoteDetails( message.getData() );
+                template.convertAndSend( "decode", new EncodeMessage( DataType.Note, result));// saveOrUpdate???
             }
             default -> throw new IllegalArgumentException( "Illegal action type");
         }
     }
 
+    @RabbitListener(queues = "saveOrUpdateNote")
+    public void handleSaveOrUpdateNoteQueueMessage(Note newNote) {
+        noteService.saveNote( newNote );
+        //TODO: send somehow somewhere
+    }
+
+    @RabbitListener(queues = "removeNote")
+    public void handleRemoveNoteQueueMessage(String id) {
+        noteService.removeNote( id );
+        //TODO: send somehow somewhere
+    }
 
     @RabbitListener(queues = "getIdByUsername")
     public String handleUserQueueMessage(String username) {

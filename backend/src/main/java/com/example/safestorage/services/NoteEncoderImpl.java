@@ -19,8 +19,10 @@ public class NoteEncoderImpl implements NoteEncoder {
     @Override
     public Note encode(NoteDTO noteDTO, String ownerId) {
         encodingService.setKey( ownerId );
-        return new Note( encodingService.encode( noteDTO.getHead() ),
-                         encodingService.encode( noteDTO.getText() ), ownerId, noteDTO.getDate());
+        var note = new Note( encodingService.encode( noteDTO.getHead() ),
+                             encodingService.encode( noteDTO.getText() ), ownerId, noteDTO.getDate());
+        note.setId( noteDTO.getId() );
+        return note;
     }
 
     @Override

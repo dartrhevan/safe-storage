@@ -50,7 +50,7 @@ public class RabbitConfiguration {
 
     @Bean
     public Binding getEncodeQueueBinding() {
-        return BindingBuilder.bind(getEncodeQueue()).to( getDirectExchange()).with( "encode");
+        return BindingBuilder.bind(getEncodeQueue()).to( getDirectExchange()).with( QueuesRoutes.ENCODE_QUEUE);
     }
 
     @Bean
@@ -61,7 +61,7 @@ public class RabbitConfiguration {
 
     @Bean
     public Binding getDecodeQueueBinding() {
-        return BindingBuilder.bind(getDecodeQueue()).to( getDirectExchange()).with( "decode");
+        return BindingBuilder.bind(getDecodeQueue()).to( getDirectExchange()).with( QueuesRoutes.DECODE_QUEUE);
     }
 
     @Bean
@@ -71,7 +71,7 @@ public class RabbitConfiguration {
 
     @Bean
     public Binding getSaveOrUpdateNoteQueueBinding() {
-        return BindingBuilder.bind(getSaveOrUpdateNoteQueue()).to( getDirectExchange()).with( "saveOrUpdateNote");
+        return BindingBuilder.bind(getSaveOrUpdateNoteQueue()).to( getDirectExchange()).with( QueuesRoutes.SAVE_OR_UPDATE_QUEUE);
     }
 
     @Bean
@@ -81,7 +81,7 @@ public class RabbitConfiguration {
 
     @Bean
     public Binding getUserQueueBinding() {
-        return BindingBuilder.bind(getUserQueue()).to( getDirectExchange()).with( "getIdByUsername");
+        return BindingBuilder.bind(getUserQueue()).to( getDirectExchange()).with( QueuesRoutes.GET_ID_BY_USERNAME_QUEUE);
     }
 
     @Bean
@@ -91,7 +91,7 @@ public class RabbitConfiguration {
 
     @Bean
     public Binding getRemoveNoteQueueBinding() {
-        return BindingBuilder.bind(getRemoveNoteQueue()).to( getDirectExchange()).with( "removeNote");
+        return BindingBuilder.bind(getRemoveNoteQueue()).to( getDirectExchange()).with( QueuesRoutes.REMOVE_NOTE_QUEUE);
     }
 
     @Bean
@@ -101,6 +101,6 @@ public class RabbitConfiguration {
 
     @Bean
     public Binding getNoteQueueBinding() {
-        return BindingBuilder.bind(getNoteQueue()).to( getDirectExchange()).with( "getNote");
+        return BindingBuilder.bind(getNoteQueue()).to( getDirectExchange()).with( QueuesRoutes.GET_NOTE_QUEUE);
     }
 }
