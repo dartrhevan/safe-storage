@@ -1,6 +1,7 @@
 package com.example.safestorage.services;
 
 import com.example.safestorage.models.Note;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -13,12 +14,12 @@ import java.util.List;
 public class NoteServiceImpl implements NoteService {
 
     private final MongoTemplate template;
-    private final NoteEncoder encodingService;
+    //private final NoteEncoder encodingService;
 
     @Autowired
-    public NoteServiceImpl(MongoTemplate template, NoteEncoder encodingService) {
+    public NoteServiceImpl(MongoTemplate template) {
         this.template = template;
-        this.encodingService = encodingService;
+        //this.encodingService = encodingService;
     }
 
     @Override
@@ -41,12 +42,16 @@ public class NoteServiceImpl implements NoteService {
     public List<Note> listNotes(String userId) {
         var query = Query.query( Criteria.where( "ownerId" ).is(userId));
         //encodingService.setKey( userId );
-        query.fields().exclude( "text" ).exclude( "addingDate" );
-        return template.find( query, Note.class );
+        query.fields().exclude( "encodedText" ).exclude( "addingDate" );
+        var result = template.find( query, Note.class );
+        System.out.println(result);
+        return result;
     }
 
     @Override
     public Note getNoteDetails(String noteId) {
-        return template.findOne( Query.query( Criteria.where( "id" ).is( noteId ) ), Note.class );
+        var note = template.findOne( Query.query( Criteria.where( "id" ).is( noteId ) ), Note.class );
+        System.out.println(note);//Here is null....
+        return note;
     }
 }

@@ -3,11 +3,12 @@ package com.example.safestorage.models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 @Document
-public class Note {
+public class Note implements Serializable {
 
     @Override
     public boolean equals(Object o) {
@@ -55,7 +56,7 @@ public class Note {
     }
 
     @Id
-    private String Id;
+    private String Id;//TODO: change type into long!!!!
     private byte[] encodedHeader;
     private byte[] encodedText;
     private String ownerId;

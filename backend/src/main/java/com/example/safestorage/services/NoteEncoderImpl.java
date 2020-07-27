@@ -27,7 +27,7 @@ public class NoteEncoderImpl implements NoteEncoder {
 
     @Override
     public NoteDTO decode(Note coddedNote) {
-        encodingService.setKey( coddedNote.getOwnerId() );
+        encodingService.setKey( coddedNote.getOwnerId() );//This is null?!
         return new NoteDTO( encodingService.decode( coddedNote.getEncodedHeader() ), encodingService.decode( coddedNote.getEncodedText() ),
                             coddedNote.getId(), coddedNote.getAddingDate() );
     }

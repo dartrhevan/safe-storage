@@ -1,6 +1,6 @@
 package com.example.safestorage.messaging;
 
-import com.example.safestorage.configurations.QueuesRoutes;
+import com.example.safestorage.configurations.QueuesNames;
 import com.example.safestorage.models.*;
 import com.example.safestorage.services.NoteEncoder;
 import com.example.safestorage.services.NoteService;
@@ -11,11 +11,14 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 
-@EnableRabbit //нужно для активации обработки аннотаций @RabbitListener
-@Component
+//@EnableRabbit //нужно для активации обработки аннотаций @RabbitListener
+//@Component
 public class Listeners {
 
     private final NoteEncoder noteEncoder;
@@ -34,12 +37,12 @@ public class Listeners {
         this.noteService = noteService;
     }
 
-        @RabbitListener(queues = QueuesRoutes.DECODE_QUEUE)
-    public Object handleDecodeQueueMessage(EncodeMessage message) {
+    @RabbitListener(queues = QueuesNames.DECODE_QUEUE)//MUST BE QUEUE NOT ROUTE!!!!
+    public Object handleDecodeQueueMessage(DecodeMessage message) {
         switch (message.getDataType()) {
             case List -> {
                 var noteList = (List<Note>) message.getData();
-                return noteList.stream().map(noteEncoder::decode);
+                return noteList.stream().map(noteEncoder::decode).collect( Collectors.toList() );
                 //TODO: send somehow somewhere
             }
             case Note -> {
@@ -52,43 +55,43 @@ public class Listeners {
     }
 
 
-    @RabbitListener(queues = QueuesRoutes.DECODE_QUEUE)
-    public void handleEncodeQueueMessage(DecodeMessage message) {
+    @RabbitListener(queues = QueuesNames.ENCODE_QUEUE)
+    public void handleEncodeQueueMessage(EncodeMessage message) {
         var noteDTO = message.getNote();
         var userId = (String) template.convertSendAndReceive( "getIdByUsername", message.getUsername() );
         var code = noteEncoder.encode( noteDTO, userId );
         template.convertAndSend( "saveOrUpdateNote",  code );// saveOrUpdate???
     }
 
-    @RabbitListener(queues = QueuesRoutes.GET_NOTE_QUEUE)
-    public void handleGetNoteQueueMessage(GetNoteMessage message) {
+    @RabbitListener(queues = QueuesNames.GET_NOTE_QUEUE)
+    public Object handleGetNoteQueueMessage(GetNoteMessage message) {
         switch (message.getDataType()) {
             case List -> {
                 var userId = (String) template.convertSendAndReceive( "getIdByUsername", message.getData() );
                 var result = noteService.listNotes( userId );
-                template.convertAndSend( "decode", new EncodeMessage( DataType.List, result));// saveOrUpdate???
+                return template.convertSendAndReceive( "decode", new DecodeMessage( DataType.List, result));// saveOrUpdate???
             }
             case Note -> {
                 var result = noteService.getNoteDetails( message.getData() );
-                template.convertAndSend( "decode", new EncodeMessage( DataType.Note, result));// saveOrUpdate???
+                return template.convertSendAndReceive( "decode", new DecodeMessage( DataType.Note, result));// saveOrUpdate???
             }
             default -> throw new IllegalArgumentException( "Illegal action type");
         }
     }
 
-    @RabbitListener(queues = QueuesRoutes.SAVE_OR_UPDATE_QUEUE)
+    @RabbitListener(queues = QueuesNames.SAVE_OR_UPDATE_QUEUE)
     public void handleSaveOrUpdateNoteQueueMessage(Note newNote) {
         noteService.saveNote( newNote );
         //TODO: send somehow somewhere
     }
 
-    @RabbitListener(queues = QueuesRoutes.REMOVE_NOTE_QUEUE)
+    @RabbitListener(queues = QueuesNames.REMOVE_NOTE_QUEUE)
     public void handleRemoveNoteQueueMessage(String id) {//TODO: check user
         noteService.removeNote( id );
         //TODO: send somehow somewhere
     }
 
-    @RabbitListener(queues = QueuesRoutes.GET_ID_BY_USERNAME_QUEUE)
+    @RabbitListener(queues = QueuesNames.GET_ID_BY_USERNAME_QUEUE)
     public String handleUserQueueMessage(String username) {
         return userService.getIdByUsername( username );
     }

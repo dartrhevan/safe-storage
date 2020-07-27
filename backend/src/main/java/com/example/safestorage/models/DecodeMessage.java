@@ -1,27 +1,30 @@
 package com.example.safestorage.models;
 
-public class DecodeMessage {
-    private NoteDTO note;
-    private String username;
+import java.io.Serializable;
 
-    public NoteDTO getNote() {
-        return note;
+public class DecodeMessage implements Serializable {
+    private DataType dataType;
+    private Object data;
+
+    public DataType getDataType() {
+        return dataType;
     }
 
-    public void setNote(NoteDTO note) {
-        this.note = note;
+    public void setDataType(DataType dataType) {
+        this.dataType = dataType;
     }
 
-    public String getUsername() {
-        return username;
+    public Object getData() {
+        return data;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setData(Object data) {
+        this.data = data;
     }
 
-    public DecodeMessage(NoteDTO note, String username) {
-        this.note = note;
-        this.username = username;
+    public DecodeMessage(DataType dataType, Object data) {
+        this.dataType = dataType;
+        this.data = data;
     }
+
 }

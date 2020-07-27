@@ -44,9 +44,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll();//.authenticated()
                 //.and().httpBasic();
         http.headers().frameOptions().sameOrigin().and();
-        /*http.authorizeRequests()
-                .antMatchers("").authenticated()
-                .and().httpBasic();*/
+        http.authorizeRequests()
+                .antMatchers("/api/note/**").authenticated()
+                .and().httpBasic();
 
         http.csrf().disable();
         http.formLogin()

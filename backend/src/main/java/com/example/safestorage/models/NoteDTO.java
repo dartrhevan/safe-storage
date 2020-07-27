@@ -1,9 +1,10 @@
 package com.example.safestorage.models;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-public class NoteDTO {
+public class NoteDTO implements Serializable {
     private String head;
     private String text;
     private String id;

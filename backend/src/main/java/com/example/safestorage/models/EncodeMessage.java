@@ -3,31 +3,27 @@ package com.example.safestorage.models;
 import java.io.Serializable;
 
 public class EncodeMessage implements Serializable {
-    private DataType dataType;
-    private Object data;
+    private NoteDTO note;
+    private String username;
 
-    public DataType getDataType() {
-        return dataType;
+    public NoteDTO getNote() {
+        return note;
     }
 
-    public void setDataType(DataType dataType) {
-        this.dataType = dataType;
+    public void setNote(NoteDTO note) {
+        this.note = note;
     }
 
-    public Object getData() {
-        return data;
+    public String getUsername() {
+        return username;
     }
 
-    public void setData(Object data) {
-        this.data = data;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public EncodeMessage() {
+    public EncodeMessage(NoteDTO note, String username) {
+        this.note = note;
+        this.username = username;
     }
-
-    public EncodeMessage(DataType dataType, Object data) {
-        this.dataType = dataType;
-        this.data = data;
-    }
-
 }

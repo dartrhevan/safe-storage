@@ -42,7 +42,7 @@ class MongoTests {
     }
 
     @Test
-    void mongoExcludeTest2() throws Exception {
+    void mongoExcludeTest() throws Exception {
         var name = "dsad";
         var pass = "ewf";
         var user = new User(name, pass);
@@ -56,5 +56,4 @@ class MongoTests {
         //TODO: move to after test
         userService.removeUser( entity.getId() );
     }
-
 }
