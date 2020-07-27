@@ -27,7 +27,7 @@ class MongoTests {
     }
 
     @Test
-    void mongoSimpleTest() {
+    void mongoSimpleTest() throws Exception {
         assert userService.getClass().equals( UserServiceImpl.class );
         var name = "dsad";
         var pass = "ewf";
@@ -42,7 +42,7 @@ class MongoTests {
     }
 
     @Test
-    void mongoExcludeTest2() {
+    void mongoExcludeTest2() throws Exception {
         var name = "dsad";
         var pass = "ewf";
         var user = new User(name, pass);

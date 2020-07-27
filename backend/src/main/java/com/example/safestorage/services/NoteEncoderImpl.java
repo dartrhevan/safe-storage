@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class NoteEncoderImpl implements NoteEncoder {
 
-    private final EncodingServiceImpl encodingService;
+    private final EncodingService encodingService;
 
     @Autowired
-    public NoteEncoderImpl(EncodingServiceImpl encodingService) {
+    public NoteEncoderImpl(EncodingService encodingService) {
         this.encodingService = encodingService;
     }
 

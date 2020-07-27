@@ -29,7 +29,11 @@ public class UserController {
     public void registration(UserDTO userData) {
         System.out.println(userData.getUsername());
         var user = new User(userData.getUsername(), encoder.encode( userData.getPassword() ));
-        userService.saveUser( user );
+        try {
+            userService.saveUser( user );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @GetMapping("/get-login")

@@ -22,6 +22,7 @@ public class EncodingServiceImpl implements EncodingService {
 
     @Override
     public byte[] encode(String source, String key) {
+        if(source == null) return null;
         try {
             encryptionService.setKey( key );
             return compressionService.compress( encryptionService.encrypt( source ) );
@@ -33,6 +34,7 @@ public class EncodingServiceImpl implements EncodingService {
 
     @Override
     public String decode(byte[] code, String key) {
+        if(code == null) return null;
         try {
             encryptionService.setKey( key );
             return encryptionService.decrypt( compressionService.decompress( code ) );

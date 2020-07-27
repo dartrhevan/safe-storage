@@ -24,4 +24,9 @@ public class UserServiceTestImpl implements UserService {
     public void removeUser(String username) {
         users.remove( username );
     }
+
+    @Override
+    public String getIdByUsername(String username) {
+        return null;
+    }
 }

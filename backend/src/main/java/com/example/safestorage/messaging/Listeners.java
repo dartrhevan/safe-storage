@@ -1,5 +1,6 @@
 package com.example.safestorage.messaging;
 
+import com.example.safestorage.configurations.QueuesRoutes;
 import com.example.safestorage.models.*;
 import com.example.safestorage.services.NoteEncoder;
 import com.example.safestorage.services.NoteService;
@@ -33,8 +34,7 @@ public class Listeners {
         this.noteService = noteService;
     }
 
-    //TODO: extract all keys to constants!
-    @RabbitListener(queues = "decode")
+        @RabbitListener(queues = QueuesRoutes.DECODE_QUEUE)
     public void handleDecodeQueueMessage(EncodeMessage message) {
         switch (message.getDataType()) {
             case List -> {
@@ -52,7 +52,7 @@ public class Listeners {
     }
 
 
-    @RabbitListener(queues = "encode")
+    @RabbitListener(queues = QueuesRoutes.DECODE_QUEUE)
     public void handleEncodeQueueMessage(DecodeMessage message) {
         var noteDTO = message.getNote();
         var userId = (String) template.convertSendAndReceive( "getIdByUsername", message.getUsername() );
@@ -60,7 +60,7 @@ public class Listeners {
         template.convertAndSend( "saveOrUpdateNote",  code );// saveOrUpdate???
     }
 
-    @RabbitListener(queues = "getNote")
+    @RabbitListener(queues = QueuesRoutes.GET_NOTE_QUEUE)
     public void handleGetNoteQueueMessage(GetNoteMessage message) {
         switch (message.getDataType()) {
             case List -> {
@@ -76,19 +76,19 @@ public class Listeners {
         }
     }
 
-    @RabbitListener(queues = "saveOrUpdateNote")
+    @RabbitListener(queues = QueuesRoutes.SAVE_OR_UPDATE_QUEUE)
     public void handleSaveOrUpdateNoteQueueMessage(Note newNote) {
         noteService.saveNote( newNote );
         //TODO: send somehow somewhere
     }
 
-    @RabbitListener(queues = "removeNote")
+    @RabbitListener(queues = QueuesRoutes.REMOVE_NOTE_QUEUE)
     public void handleRemoveNoteQueueMessage(String id) {
         noteService.removeNote( id );
         //TODO: send somehow somewhere
     }
 
-    @RabbitListener(queues = "getIdByUsername")
+    @RabbitListener(queues = QueuesRoutes.GET_ID_BY_USERNAME_QUEUE)
     public String handleUserQueueMessage(String username) {
         return userService.getIdByUsername( username );
     }
