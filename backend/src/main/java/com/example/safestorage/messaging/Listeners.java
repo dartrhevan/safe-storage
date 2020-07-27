@@ -2,6 +2,7 @@ package com.example.safestorage.messaging;
 
 import com.example.safestorage.models.*;
 import com.example.safestorage.services.NoteEncoder;
+import com.example.safestorage.services.NoteService;
 import com.example.safestorage.services.UserService;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -22,11 +23,14 @@ public class Listeners {
 
     private final UserService userService;
 
+    private final NoteService noteService;
+
     @Autowired
-    public Listeners(NoteEncoder noteEncoder, RabbitTemplate template, UserService userService) {
+    public Listeners(NoteEncoder noteEncoder, RabbitTemplate template, UserService userService, NoteService noteService) {
         this.noteEncoder = noteEncoder;
         this.template = template;
         this.userService = userService;
+        this.noteService = noteService;
     }
 
     //TODO: extract all keys to constants!
@@ -41,7 +45,8 @@ public class Listeners {
             }
             case DecodeList -> {
                 var noteList = (List<Note>) message.getData();
-                var result = noteList.stream().map( noteEncoder::decode);
+
+                var result = noteList.stream().map(noteEncoder::decode);
                 //TODO: send somehow somewhere
             }
             case DecodeNote -> {
@@ -51,13 +56,35 @@ public class Listeners {
             }
             default -> throw new IllegalArgumentException( "Illegal action type");
         }
-        //System.out.println("From queue4: " + message);
-        //logger.info("Received from queue 1: " + message);
     }
 
     @RabbitListener(queues = "note")
     public void handleNoteQueueMessage(NoteMessage message) {
-        System.out.println("From queue2: " + message);
+        switch (message.getAction()) {
+            case List -> {
+                var userId = (String) template.convertSendAndReceive( "getIdByUsername", message.getData() );
+                var result = noteService.listNotes( userId );
+                template.convertAndSend( "encoding", new EncodingMessage(EncodingAction.DecodeList, result, (String) message.getData()));// saveOrUpdate???
+            }
+            case GetDetails -> {
+                var result = noteService.getNoteDetails( (String) message.getData() );
+                template.convertAndSend( "encoding", new EncodingMessage(EncodingAction.DecodeNote, result, null));// saveOrUpdate???
+            }
+            case Save -> {
+                noteService.saveNote( (Note) message.getData() );
+                //TODO: send somehow somewhere
+            }
+            case Edit -> //noinspection DuplicateBranchesInSwitch
+                    {
+                noteService.saveNote( (Note) message.getData() );
+                //TODO: send somehow somewhere
+            }
+            case Remove -> {
+                noteService.removeNote( (String) message.getData() );
+                //TODO: send somehow somewhere
+            }
+            default -> throw new IllegalArgumentException( "Illegal action type");
+        }
     }
 
 
