@@ -21,23 +21,13 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-/**
-    @Autowired
-    private DataSource dataSource;
-
-    @Autowired
-*/
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-    // регистрируем нашу реализацию UserDetailsService
-    // а также PasswordEncoder для приведения пароля в формат SHA1
-
-
+    private final UserDetailsServiceImpl userDetailsService;
     private final BCryptPasswordEncoder encoder;
 
     @Autowired
-    public SecurityConfiguration(BCryptPasswordEncoder encoder) {
+    public SecurityConfiguration(BCryptPasswordEncoder encoder, UserDetailsServiceImpl userDetailsService) {
         this.encoder = encoder;
+        this.userDetailsService = userDetailsService;
     }
 
     @Autowired

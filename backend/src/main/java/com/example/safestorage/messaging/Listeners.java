@@ -35,16 +35,16 @@ public class Listeners {
     }
 
         @RabbitListener(queues = QueuesRoutes.DECODE_QUEUE)
-    public void handleDecodeQueueMessage(EncodeMessage message) {
+    public Object handleDecodeQueueMessage(EncodeMessage message) {
         switch (message.getDataType()) {
             case List -> {
                 var noteList = (List<Note>) message.getData();
-                var result = noteList.stream().map(noteEncoder::decode);
+                return noteList.stream().map(noteEncoder::decode);
                 //TODO: send somehow somewhere
             }
             case Note -> {
                 var note = (Note) message.getData();
-                var result = noteEncoder.decode( note );
+                return noteEncoder.decode( note );
                 //TODO: send somehow somewhere
             }
             default -> throw new IllegalArgumentException( "Illegal action type");
@@ -83,7 +83,7 @@ public class Listeners {
     }
 
     @RabbitListener(queues = QueuesRoutes.REMOVE_NOTE_QUEUE)
-    public void handleRemoveNoteQueueMessage(String id) {
+    public void handleRemoveNoteQueueMessage(String id) {//TODO: check user
         noteService.removeNote( id );
         //TODO: send somehow somewhere
     }
