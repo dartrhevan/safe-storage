@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+frontend/src/App.test.tsx
+frontend/src/serviceWorker.ts
+frontend/src/setupTests.ts
+node_modules/.yarn-integrity
