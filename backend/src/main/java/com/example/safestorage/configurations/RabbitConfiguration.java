@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
-//@EnableRabbit
-//@Configuration
+@EnableRabbit
+@Configuration
 public class RabbitConfiguration {
     //настраиваем соединение с RabbitMQ
     @Bean
