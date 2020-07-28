@@ -54,6 +54,15 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", passwordHash='" + passwordHash + '\'' +
+                '}';
+    }
+
     @Id
     private String id;
     @Indexed(unique=true)

@@ -2,6 +2,7 @@ package com.example.safestorage.services;
 
 import com.example.safestorage.models.Note;
 import com.example.safestorage.models.User;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -34,8 +35,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void removeUser(String username) {
-        template.findAndRemove( Query.query( Criteria.where( "username" ).is( username )), Note.class );
+    public void removeUser(String id) {
+        template.remove( Query.query( Criteria.where( "id" ).is( new ObjectId(id) )), User.class );//findAndRemove( Query.query( Criteria.where( "username" ).is( username )), Note.class );
     }
 
     @Override

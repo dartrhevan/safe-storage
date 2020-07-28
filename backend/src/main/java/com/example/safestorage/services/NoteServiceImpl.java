@@ -50,7 +50,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public Note getNoteDetails(String noteId) {
-        var note = template.findOne( Query.query( Criteria.where( "id" ).is( noteId ) ), Note.class );
+        var note = template.findById(noteId, Note.class );//findOne( Query.query( Criteria.where( "id" ).is( new ObjectId(noteId) ) ), Note.class );
         System.out.println(note);//Here is null....
         return note;
     }

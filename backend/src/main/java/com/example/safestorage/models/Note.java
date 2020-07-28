@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
@@ -15,14 +16,14 @@ public class Note implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Note)) return false;
         Note note = (Note) o;
-        return Objects.equals( Id, note.Id ) &&
-                encodedHeader.equals( note.encodedHeader ) &&
-                encodedText.equals( note.encodedText );
+        return Objects.equals( id, note.id ) &&
+                Arrays.equals( encodedHeader, note.encodedHeader ) &&
+                Arrays.equals( encodedText, note.encodedText );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash( Id, encodedHeader, encodedText );
+        return Objects.hash( id, encodedHeader, encodedText );
     }
 
     public Note(byte[] encodedHeader, byte[] encodedText, String ownerId, Date addingDate) {
@@ -36,7 +37,7 @@ public class Note implements Serializable {
     }
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public byte[] getEncodedHeader() {
@@ -55,8 +56,20 @@ public class Note implements Serializable {
         this.encodedText = encodedText;
     }
 
+    @Override
+    public String toString() {
+        return "Note{" +
+                "id='" + id + '\'' +
+                ", encodedHeader=" + Arrays.toString( encodedHeader ) +
+                ", encodedText=" + Arrays.toString( encodedText ) +
+                ", ownerId='" + ownerId + '\'' +
+                ", addingDate=" + addingDate +
+                '}';
+    }
+
     @Id
-    private String Id;//TODO: change type into long!!!!
+    //@MongoId(value = FieldType.OBJECT_ID)
+    private String id;
     private byte[] encodedHeader;
     private byte[] encodedText;
     private String ownerId;
@@ -79,6 +92,6 @@ public class Note implements Serializable {
     }
 
     public void setId(String id) {
-        Id = id;
+        this.id = id;
     }
 }
