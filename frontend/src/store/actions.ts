@@ -1,3 +1,11 @@
 import {ActionTypes} from './actionTypes';
+import {IAction} from "./IAction";
+import Note from "../model/Note";
 
-export const Action = {};
+export function SetCurrent(current : Note) : IAction {
+    return {
+        type: ActionTypes.SetCurrent,
+        note: current,
+        list: null
+    };
+}

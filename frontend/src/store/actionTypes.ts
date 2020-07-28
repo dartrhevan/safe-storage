@@ -1,7 +1,8 @@
 export enum ActionTypes {
-    Init,
     SetCurrent,
     UpdateList,
-    removeNote,
-    editNote//fake actions
+    RemoveNote,
+    EditNote,
+    SetUsername,
+    Logout//fake actions
 }
