@@ -5,6 +5,9 @@ import {makeStyles} from "@material-ui/core/styles";
 import TabList from '@material-ui/lab/TabList';
 import TabPanel from '@material-ui/lab/TabPanel';
 import {TabContext} from "@material-ui/lab";
+import Login from "./Login";
+import Registration from "./Registration";
+
 interface IProps {
     open: boolean
 }
@@ -33,8 +36,8 @@ export default function ({open} : IProps) {
             </TabList>
             </AppBar>
 
-            <TabPanel value="0">Item One</TabPanel>
-            <TabPanel value="1">Item Two</TabPanel>
+            <TabPanel value="0"><Login /></TabPanel>
+            <TabPanel value="1"><Registration /></TabPanel>
 
             </TabContext>
         </Dialog>
