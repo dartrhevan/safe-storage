@@ -17,6 +17,8 @@ import MailIcon from '@material-ui/icons/Mail';
 import './App.css';
 import AuthDialog from "./components/AuthDialog";
 
+const drawerWidth = 300;
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {
@@ -32,11 +34,11 @@ const useStyles = makeStyles((theme: Theme) =>
         flexGrow: 1,
       },
         drawer: {
-            width: 300,
+            width: drawerWidth,
             flexShrink: 1,
         },
         drawerPaper: {
-            width: 300,
+            width: drawerWidth,
         },
         drawerContainer: {
             overflow: 'auto',
@@ -48,10 +50,6 @@ function App() {
   const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
-   /* const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-*/
     const toggleDrawer = () => {
         setOpen(!open);
     };

@@ -1,21 +1,10 @@
 import React from 'react';
 import {
-    AppBar,
     Button,
     Container,
-    createStyles,
-    Dialog,
-    Tab,
-    Tabs,
     TextField,
-    Theme,
-    withStyles
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-
-import TabList from '@material-ui/lab/TabList';
-import TabPanel from '@material-ui/lab/TabPanel';
-import {TabContext} from "@material-ui/lab";
 
 const useStyles = makeStyles({
     root: {
