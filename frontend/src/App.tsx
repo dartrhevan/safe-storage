@@ -15,6 +15,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import MenuIcon from '@material-ui/icons/Menu';
 import MailIcon from '@material-ui/icons/Mail';
 import './App.css';
+import AuthDialog from "./AuthDialog";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -113,6 +114,7 @@ function App() {
                 </List>
             </Drawer>
             </Hidden>
+            <AuthDialog open={true}/>
         </div>
     </div>
   );
