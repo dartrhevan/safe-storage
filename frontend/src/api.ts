@@ -57,7 +57,7 @@ export function editNote(note: NoteDTO) {
 }
 
 export function listNotes() {
-    return fetch('/api/note/list',).catch(console.log)
+    return fetch('/api/note/list').catch(console.log)
 }
 
 export function getNoteDetails(id: string) {

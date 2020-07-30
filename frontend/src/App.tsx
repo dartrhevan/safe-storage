@@ -69,6 +69,10 @@ function App() {
         setOpenDialog(false);
     }
 
+    //useEffect(...)
+    //getUsername from api
+    //
+
     const dispatch = useDispatch();
 
     const toggleDrawer = () => {

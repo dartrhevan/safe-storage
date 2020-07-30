@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react';
-import {login} from '../api';
+import {login, listNotes} from '../api';
 import {
     Button,
     Container,
@@ -9,6 +9,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import {strict} from "assert";
 import { useStore, useDispatch } from 'react-redux';
 import {setUsername as setStateUsername} from '../store/Auth/actions';
+import Note from '../model/Note';
+import { UpdateList } from '../store/Note/actions';
 
 const useStyles = makeStyles({
     root: {
@@ -28,7 +30,7 @@ export default function ({ close }: IProps) {
     const [password, setPassword] = React.useState<string>("");
     const store = useStore();
     const dispatch = useDispatch();
-    const d = () =>{};
+
     function onLoginClick() {
         login(username, password)
             .then((r: void | Response) => {
@@ -39,9 +41,18 @@ export default function ({ close }: IProps) {
                 else {
                     dispatch(setStateUsername(username));
                     console.log(store.getState());
+
                     close();
+                    return listNotes();
                 }
-            })
+            }).then(res => {
+                    const resp = res as Response;
+                    console.log(resp)
+                    if(!resp || resp.status !== 200)
+                        alert('Error!');
+                    else
+                    return resp.json();
+            }).then(list => dispatch(UpdateList(list)));
     }
 
     function handleChangePassword(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
