@@ -74,9 +74,14 @@
         <resources>
             <resource>
                 <excludes>
-                    <exclude>../frontend/node_modules/*</exclude>
-                    <exclude>/frontend/node_modules/*</exclude>
-                    <exclude>**/node_modules/*</exclude>
+                    <!--<exclude>../frontend/node_modules/*.*</exclude>-->
+                    <exclude>/frontend/node_modules/*.*</exclude>
+                    <exclude>**/node_modules/*.*</exclude>
+
+                   <!-- <exclude>../frontend/node_modules/**</exclude>-->
+                    <exclude>/frontend/node_modules/**</exclude>
+                    <exclude>**/node_modules/**</exclude>
+
                 </excludes>
             </resource>
         </resources>

@@ -16,6 +16,21 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MailIcon from '@material-ui/icons/Mail';
 import './App.css';
 import AuthDialog from "./components/AuthDialog";
+import { useStore, useDispatch } from 'react-redux';
+//Remove
+interface IAuth {
+    username: string
+}
+
+interface INote {
+
+}
+
+interface IState {
+    auth: IAuth
+    note: INote
+}
+//
 
 const drawerWidth = 300;
 
@@ -50,9 +65,13 @@ function App() {
   const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
+    const store = useStore();
+    const dispatch = useDispatch();
+
     const toggleDrawer = () => {
         setOpen(!open);
     };
+    console.log(store.getState());
 
     return (
     <div className={classes.root}>
@@ -112,7 +131,7 @@ function App() {
                 </List>
             </Drawer>
             </Hidden>
-            <AuthDialog open={true}/>
+            <AuthDialog open={store.getState().auth.username === ''}/>
         </div>
     </div>
   );

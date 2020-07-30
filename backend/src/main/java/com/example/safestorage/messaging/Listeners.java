@@ -17,8 +17,8 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
-@EnableRabbit //нужно для активации обработки аннотаций @RabbitListener
-@Component
+//@EnableRabbit //нужно для активации обработки аннотаций @RabbitListener
+//@Component
 public class Listeners {
 
     private final NoteEncoder noteEncoder;

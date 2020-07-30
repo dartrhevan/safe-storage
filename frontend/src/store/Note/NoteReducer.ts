@@ -6,10 +6,9 @@ import Note from "../../model/Note";
 interface INoteState  {
     list: Array<Note>
     current: Note | null
-    username: string | null
 }
 
-export default function (state: INoteState = { list: [], current: null, username: null}, action : NoteAction) : INoteState {
+export default function (state: INoteState = { list: [], current: null}, action : NoteAction) : INoteState {
     let noteIndex: number;
     switch (action.type) {
         case ActionTypes.SetCurrent:
@@ -22,11 +21,11 @@ export default function (state: INoteState = { list: [], current: null, username
         case ActionTypes.EditNote:
             noteIndex = state.list.findIndex((note: Note) => note.id === (action.note as Note).id);
             state.list[noteIndex] = action.note as Note;
-            return {...state};
+            return {...state};/*
         case ActionTypes.SetUsername:
             return {...state, current: action.note as Note}
         case ActionTypes.Logout:
-            return {...state, current: action.note as Note}
+            return {...state, current: action.note as Note}*/
         default: return state;
     }
 }

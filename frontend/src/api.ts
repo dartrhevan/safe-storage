@@ -11,7 +11,7 @@ export function login(username: string, password: string) {
         }).catch(console.log)
 }
 
-export function register(username: string, password: string) {
+export function registration(username: string, password: string) {
     const body = new FormData();
     body.append("username", username);
     body.append("password", password);
@@ -24,6 +24,10 @@ export function register(username: string, password: string) {
 
 export function getUsername() {
     return fetch('/api/get-username').catch(console.log)
+}
+
+export function logout() {
+    return fetch('/api/logout').catch(console.log)
 }
 
 export function addNote(note: NoteDTO) {
