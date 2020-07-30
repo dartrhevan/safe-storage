@@ -19,6 +19,8 @@ import AuthDialog from "./components/AuthDialog";
 import {useStore, useDispatch} from 'react-redux';
 import AdaptiveDrawer from './components/AdaptiveDrawer';
 import Note from './model/Note';
+import INoteState from './store/Note/INoteState';
+//import store from './store/store';
 
 const drawerWidth = 300;
 
@@ -36,15 +38,8 @@ const useStyles = makeStyles((theme: Theme) =>
         title: {
             flexGrow: 1,
         },
-        content: {/*
-            flexGrow: 1,
-            padding: theme.spacing(3),
-            transition: theme.transitions.create('margin', {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
-            }),
-            marginRight: -drawerWidth,*/
-            marginLeft: drawerWidth//height.appBar
+        content: {
+            marginLeft: drawerWidth
         },
         contentShift: {
             transition: theme.transitions.create('margin', {
@@ -65,7 +60,11 @@ function App() {
 
     const store = useStore();
     const [openDialog, setOpenDialog] = React.useState(store.getState().auth.username === '');
+    const [notes, setNotes] = React.useState<INoteState>(store.getState().notes);
 
+    store.subscribe(() => {
+        setNotes(store.getState().notes);
+    });
     function close() {
         setOpenDialog(false);
     }
@@ -75,6 +74,7 @@ function App() {
     const toggleDrawer = () => {
         setOpenDrawer(!openDrawer);
     };
+
     console.log(store.getState());
 
     return (
@@ -97,7 +97,7 @@ function App() {
                 <AdaptiveDrawer open={openDrawer}>
                     <Toolbar/>
                     <List>
-                        {store.getState().notes.list.map((note: Note, index: number) => (
+                        {notes.list.map((note: Note, index: number) => (
                             <ListItem button key={note.id as string}>
                                 <ListItemIcon><MailIcon/></ListItemIcon>
                                 <ListItemText primary={note.head}/>

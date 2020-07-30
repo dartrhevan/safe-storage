@@ -1,19 +1,30 @@
 import {ActionTypes} from '../actionTypes';
-import {NoteAction} from "./NoteAction";
 import Note from "../../model/Note";
 
-export function SetCurrent(current : Note) : NoteAction {
-    return new NoteAction(ActionTypes.SetCurrent, current);
+export function SetCurrent(note : Note) {
+    return {
+        type: ActionTypes.SetCurrent,
+        note
+    }
 }
 
-export function UpdateList(list : Note[]) : NoteAction {
-    return new NoteAction(ActionTypes.UpdateList, null, list);
+export function UpdateList(list : Note[]) {
+    return {
+        type: ActionTypes.UpdateList,
+        list
+    }
 }
 
-export function RemoveNote(note : Note) : NoteAction {
-    return new NoteAction(ActionTypes.RemoveNote, note);
+export function RemoveNote(note : Note) {
+    return {
+        type: ActionTypes.RemoveNote,
+        note
+    }
 }
 
-export function EditNote(newNote : Note) : NoteAction {
-    return new NoteAction(ActionTypes.EditNote, newNote);
+export function EditNote(note : Note) {
+    return {
+        type: ActionTypes.EditNote,
+        note
+    }
 }

@@ -37,11 +37,10 @@ export default function ({ close }: IProps) {
                 if(!resp || resp.status !== 200)
                     alert('Error!');
                 else {
-                    dispatch(setStateUsername(username))
-                    console.log(store.getState())
+                    dispatch(setStateUsername(username));
+                    console.log(store.getState());
                     close();
                 }
-                //else return resp.text();
             })
     }
 

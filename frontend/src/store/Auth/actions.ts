@@ -1,5 +1,5 @@
 import {ActionTypes} from "../actionTypes";
-import AuthAction from "./AuthAction";
+
 
 export function setUsername(username : string) {
     return {
@@ -9,5 +9,5 @@ export function setUsername(username : string) {
 }
 
 export function Logout()  {
-    return new AuthAction(ActionTypes.Logout)
+    return { type: ActionTypes.Logout }//new AuthAction(ActionTypes.Logout)
 }
