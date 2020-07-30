@@ -28,8 +28,8 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override//fine!!!
-    public void removeNote(String noteId) {
-        template.findAllAndRemove( Query.query( Criteria.where( "id" ).is( noteId ) ), Note.class );
+    public void removeNote(String noteId, String ownerId) {
+        template.findAllAndRemove( Query.query( Criteria.where( "id" ).is( noteId ).and( "ownerId" ).is( ownerId ) ), Note.class );
     }
 
     @Override

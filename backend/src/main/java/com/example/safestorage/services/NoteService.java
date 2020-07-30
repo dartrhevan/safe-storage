@@ -11,7 +11,7 @@ public interface NoteService {
 
     void saveNote(Note note);
 
-    void removeNote(String noteId);
+    void removeNote(String noteId, String ownerId);
 
     void editNote(Note newNote);
 

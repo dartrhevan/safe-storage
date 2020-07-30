@@ -17,8 +17,8 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
-//@EnableRabbit //нужно для активации обработки аннотаций @RabbitListener
-//@Component
+@EnableRabbit //нужно для активации обработки аннотаций @RabbitListener
+@Component
 public class Listeners {
 
     private final NoteEncoder noteEncoder;
@@ -86,8 +86,9 @@ public class Listeners {
     }
 
     @RabbitListener(queues = QueuesNames.REMOVE_NOTE_QUEUE)
-    public void handleRemoveNoteQueueMessage(String id) {//TODO: check user
-        noteService.removeNote( id );
+    public void handleRemoveNoteQueueMessage(RemoveMessage message) {//TODO: check user
+        var userId = userService.getIdByUsername( message.getUsername() );
+        noteService.removeNote( message.getId(), userId );
         //TODO: send somehow somewhere
     }
 

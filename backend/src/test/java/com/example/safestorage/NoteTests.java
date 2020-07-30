@@ -42,6 +42,6 @@ public class NoteTests {
     @After
     public void cleaning() {
         if(entity != null)
-            noteService.removeNote( entity.getId() );
+            noteService.removeNote( entity.getId(), entity.getOwnerId() );
     }
 }

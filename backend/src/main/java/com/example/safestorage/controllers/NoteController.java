@@ -1,10 +1,7 @@
 package com.example.safestorage.controllers;
 
 import com.example.safestorage.configurations.QueuesRoutes;
-import com.example.safestorage.models.DataType;
-import com.example.safestorage.models.EncodeMessage;
-import com.example.safestorage.models.GetNoteMessage;
-import com.example.safestorage.models.NoteDTO;
+import com.example.safestorage.models.*;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,23 +34,16 @@ public class NoteController {
     @PostMapping
     public void addNote(NoteDTO note, Principal user) {
         template.convertAndSend( QueuesRoutes.ENCODE, new EncodeMessage( note, user.getName() ) );
-        // WRONG QUEUE & MESSAGE FORMAT!
     }
 
     @PutMapping
     public void editNote(NoteDTO note, Principal user) {
         template.convertAndSend( QueuesRoutes.ENCODE, new EncodeMessage( note, user.getName() ) );
-
-        //template.convertAndSend( QueuesRoutes.SAVE_OR_UPDATE_QUEUE, note);
-        //WRONG QUEUE & MESSAGE FORMAT!
     }
 
     @DeleteMapping("/{id}")
-    public void removeNote(@PathVariable("id") String id, Principal user, HttpStatus status/*,  HttpServletResponse response*/) {
-        /*if(user == null) {
-            response.setStatus( 401 );
-            return;
-        }*/
-        template.convertAndSend( QueuesRoutes.REMOVE_NOTE, id );//TODO: send username to check
+    public void removeNote(@PathVariable("id") String id, Principal user, HttpStatus status) {
+
+        template.convertAndSend( QueuesRoutes.REMOVE_NOTE, new RemoveMessage(user.getName(), id) );//TODO: send username to check
     }
 }
