@@ -10,17 +10,18 @@ import Registration from "./Registration";
 
 interface IProps {
     open: boolean
+    close: ()=>void
 }
 
 
-export default function ({open} : IProps) {
+export default function ({open, close} : IProps) {
     const [value, setValue] = React.useState("0");
-
 //    const classes = useStyles();
     const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
         //alert(newValue)
         setValue(newValue);
     };
+
 
     return (
         <Dialog open={open}>
@@ -36,7 +37,7 @@ export default function ({open} : IProps) {
             </TabList>
             </AppBar>
 
-            <TabPanel value="0"><Login /></TabPanel>
+            <TabPanel value="0"><Login close={close} /></TabPanel>
             <TabPanel value="1"><Registration /></TabPanel>
 
             </TabContext>

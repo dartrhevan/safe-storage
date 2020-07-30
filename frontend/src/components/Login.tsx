@@ -18,13 +18,17 @@ const useStyles = makeStyles({
     }
 });
 
-export default function () {
+interface IProps {
+    close: ()=>void
+}
+
+export default function ({ close }: IProps) {
     const classes = useStyles();
     const [username, setUsername] = React.useState<string>("");
     const [password, setPassword] = React.useState<string>("");
     const store = useStore();
     const dispatch = useDispatch();
-
+    const d = () =>{};
     function onLoginClick() {
         login(username, password)
             .then((r: void | Response) => {
@@ -35,6 +39,7 @@ export default function () {
                 else {
                     dispatch(setStateUsername(username))
                     console.log(store.getState())
+                    close();
                 }
                 //else return resp.text();
             })

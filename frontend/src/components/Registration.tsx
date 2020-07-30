@@ -50,12 +50,15 @@ export default function () {
                 console.log(resp)
                 if(!resp || resp.status !== 200)
                     alert('Error!');
+                return resp.text();
+
                 /*else {
                     dispatch(setStateUsername(username))
                     console.log(store.getState())
                 }*/
                 //else return resp.text();
             })
+            .then(t => alert(t === "" ? "Succes" : t))
     }
 
     return (<Container>

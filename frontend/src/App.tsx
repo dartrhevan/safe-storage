@@ -14,7 +14,6 @@ import {
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import MenuIcon from '@material-ui/icons/Menu';
 import MailIcon from '@material-ui/icons/Mail';
-import './App.css';
 import AuthDialog from "./components/AuthDialog";
 import { useStore, useDispatch } from 'react-redux';
 //Remove
@@ -63,13 +62,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function App() {
   const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [openDrawer, setOpenDrawer] = React.useState(false);
 
     const store = useStore();
+    const [openDialog, setOpenDialog] = React.useState(store.getState().auth.username === '');
+    function close() {
+        setOpenDialog(false);
+    }
     const dispatch = useDispatch();
 
     const toggleDrawer = () => {
-        setOpen(!open);
+        setOpenDrawer(!openDrawer);
     };
     console.log(store.getState());
 
@@ -84,9 +87,9 @@ function App() {
           </IconButton>
             </Hidden>
           <Typography variant="h6" className={classes.title}>
-            News
+              {store.getState().auth.username}
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit">Logout</Button>
         </Toolbar>
       </AppBar>
         <div>
@@ -95,7 +98,7 @@ function App() {
                 <Drawer
                     className={classes.drawer}
                     variant="persistent"
-                    open={open}
+                    open={openDrawer}
                     classes={{
                         paper: classes.drawerPaper,
                     }}>
@@ -131,7 +134,7 @@ function App() {
                 </List>
             </Drawer>
             </Hidden>
-            <AuthDialog open={store.getState().auth.username === ''}/>
+            <AuthDialog open={openDialog} close={close}/>
         </div>
     </div>
   );

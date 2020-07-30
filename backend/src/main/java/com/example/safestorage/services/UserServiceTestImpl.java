@@ -16,8 +16,9 @@ public class UserServiceTestImpl implements UserService {
     }
 
     @Override
-    public void saveUser(User user) {
+    public String saveUser(User user) {
         users.put( user.getUsername(), user );
+        return "";
     }
 
     @Override

@@ -26,13 +26,13 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public void registration(UserDTO userData) {
+    public String registration(UserDTO userData) {
         System.out.println(userData.getUsername());
         var user = new User(userData.getUsername(), encoder.encode( userData.getPassword() ));
         try {
-            userService.saveUser( user );
+            return userService.saveUser( user );
         } catch (Exception e) {
-            e.printStackTrace();
+            return e.getMessage();
         }
     }
 

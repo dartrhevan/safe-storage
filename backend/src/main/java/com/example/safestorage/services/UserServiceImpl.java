@@ -1,6 +1,5 @@
 package com.example.safestorage.services;
 
-import com.example.safestorage.models.Note;
 import com.example.safestorage.models.User;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +26,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(User user) throws Exception {
+    public String saveUser(User user) {
         var entity = template.findOne( Query.query( Criteria.where( "username" ).is(user.getUsername()) ), User.class );
         if(entity == null)
             template.save( user );
-        throw new Exception("Such user already exists");//TODO: replace with result
+        else
+            return "Such user already exists";
+        return "";
+            //throw new Exception("Such user already exists");//TODO: replace with result
     }
 
     @Override
