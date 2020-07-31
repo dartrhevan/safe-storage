@@ -48,7 +48,7 @@ export default function () {
             .then((r: void | Response) => {
                 const resp = r as Response;
                 console.log(resp)
-                if(!resp || resp.status !== 200)
+                if(!r || resp.status !== 200)
                     alert('Error!');
                 else
                     return resp.text();

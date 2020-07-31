@@ -1,13 +1,13 @@
 import {ActionTypes} from '../actionTypes';
 import Note from "../../model/Note";
-
+/*
 export function SetCurrent(note : Note) {
     return {
         type: ActionTypes.SetCurrent,
         note
     }
 }
-
+*/
 export function UpdateList(list : Note[]) {
     return {
         type: ActionTypes.UpdateList,

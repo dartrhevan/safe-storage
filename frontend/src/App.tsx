@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {MouseEvent, ChangeEvent} from 'react';
 import clsx from 'clsx';
 import {
     AppBar,
@@ -10,16 +10,21 @@ import {
     ListItemIcon,
     ListItemText,
     Toolbar,
-    Typography
+    Typography,
+    TextField
 } from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles'
 import MenuIcon from '@material-ui/icons/Menu';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SaveIcon from '@material-ui/icons/Save';
 import MailIcon from '@material-ui/icons/Mail';
 import AuthDialog from "./components/AuthDialog";
 import {useStore, useDispatch} from 'react-redux';
 import AdaptiveDrawer from './components/AdaptiveDrawer';
 import Note from './model/Note';
 import INoteState from './store/Note/INoteState';
+import { getNoteDetails, editNote, removeNote } from './api';
+import { TextareaAutosize } from '@material-ui/core';
 //import store from './store/store';
 
 const drawerWidth = 300;
@@ -39,36 +44,75 @@ const useStyles = makeStyles((theme: Theme) =>
             flexGrow: 1,
         },
         content: {
-            marginLeft: drawerWidth
+            padding: theme.spacing(4),
+        },
+        field: {
+            marginTop: theme.spacing(2),
+            marginBottom: theme.spacing(2),
         },
         contentShift: {
-            transition: theme.transitions.create('margin', {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-            marginRight: 0,
+            marginLeft: drawerWidth
         },
         button: {
-            backgroundColor: theme.palette.primary.main
+            margin: theme.spacing(2),
         }
     }),
 );
 
 function App() {
     const classes = useStyles();
-    const [openDrawer, setOpenDrawer] = React.useState(false);
+    const [openDrawer, setOpenDrawer] = React.useState(true);
 
     const store = useStore();
     const [openDialog, setOpenDialog] = React.useState(store.getState().auth.username === '');
     const [notes, setNotes] = React.useState<INoteState>(store.getState().notes);
 
+
+    const [currentNote, setCurrentNote] = React.useState<Note | null>(null);
+    const [head, setHead] = React.useState<string>((currentNote?.head) as string);
+    //const head = currentNote?.head;
+    const [text, setText] = React.useState<string>((currentNote?.text) as string);
+    //const text = currentNote?.text;
     store.subscribe(() => {
         setNotes(store.getState().notes);
     });
-    function close() {
+
+    function onTextChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+        setText(event.target.value);
+    }
+
+    function onHeadChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+        setHead(event.target.value);
+    }
+
+    function onCloseDialog() {
         setOpenDialog(false);
     }
 
+    function onCancel() {
+        setCurrentNote(null);
+        setHead("head");//TODO: extract vars
+        setText("text");
+    }
+
+    function onSave() {
+        if(currentNote) { //edit note
+            currentNote.head = head;
+            currentNote.text = text;
+            currentNote.date = new Date();
+            editNote(currentNote);
+            //TODO: updateList
+        }
+        else {// add new note
+            //TODO:
+        }
+    }
+
+    function deleteNote() {
+        if(currentNote)
+            removeNote(currentNote.id as string)
+        //TODO: update list
+    }
     //useEffect(...)
     //getUsername from api
     //
@@ -78,6 +122,22 @@ function App() {
     const toggleDrawer = () => {
         setOpenDrawer(!openDrawer);
     };
+
+    function onItemClick(event: MouseEvent<HTMLDivElement>) {
+        //console.log(event.target)
+        getNoteDetails((event.target as HTMLElement).id)
+            .then(res => {
+                const resp = res as Response;
+                if(!res || resp.status !== 200)
+                    alert('Error!');
+                console.log(resp);
+                return resp.json();
+            }).then(note => {
+                setCurrentNote(note);
+                setText(note?.text);
+                setHead(note?.head);
+        });
+    }
 
     console.log(store.getState());
 
@@ -94,24 +154,56 @@ function App() {
                     <Typography variant="h6" className={classes.title}>
                         {store.getState().auth.username}
                     </Typography>
-                    <Button className={classes.button} color="inherit">Logout</Button>
+                    <Button className={classes.button}
+                            variant="contained"
+                            color="primary">Logout</Button>
                 </Toolbar>
             </AppBar>
             <div>
                 <AdaptiveDrawer open={openDrawer}>
-                    <Toolbar/>
                     <List>
                         {notes.list.map((note: Note, index: number) => (
-                            <ListItem button key={note.id as string}>
-                                <ListItemIcon><MailIcon/></ListItemIcon>
-                                <ListItemText primary={note.head}/>
+                            <ListItem onClick={onItemClick} id={note.id as string} button key={note.id as string}>
+                                {/*<ListItemIcon><MailIcon/></ListItemIcon>
+                                <ListItemText primary={note.head}/>*/}
+                                {note.head}
                             </ListItem>
                         ))}
                     </List>
                 </AdaptiveDrawer>
-                <AuthDialog open={openDialog} close={close}/>
-                <Typography className={classes.content}>
-                    <Toolbar />Some text</Typography>
+                <AuthDialog open={openDialog} close={onCloseDialog}/>
+                <Typography className={clsx(classes.content, {[classes.contentShift]: openDrawer })}>
+                    <Toolbar />
+                    <TextField onChange={onHeadChange} className={classes.field} variant="outlined" value={head??"head"} label="head" fullWidth />
+                    <TextField onChange={onTextChange} className={classes.field} variant="outlined" value={text??"text"} multiline label="text" rowsMax={25} rows={15} fullWidth />
+                    <Toolbar>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            className={classes.button}
+                            onClick={onSave}
+                            disabled={(currentNote && currentNote?.head === head && currentNote?.text === text) as boolean}
+                            startIcon={<SaveIcon />}>
+                            Save
+                        </Button>
+                        <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={deleteNote}
+                        disabled={!currentNote}
+                        className={classes.button}
+                        startIcon={<DeleteIcon />}>
+                        Delete
+                    </Button>
+                        <Button
+                            onClick={onCancel}
+                            className={classes.button}
+                            variant="contained"
+                            color="primary">
+                            Cancel</Button>
+                    </Toolbar>
+                    {/*currentNote ? (currentNote as Note).text : "PlaceHolder"*/}
+                </Typography>
             </div>
         </div>
     );

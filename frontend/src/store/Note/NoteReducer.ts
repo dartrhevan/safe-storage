@@ -9,11 +9,11 @@ interface IAction {
     note: Note | null
 }
 
-export default function (state: INoteState = { list: [], current: null}, action : IAction) : INoteState {
+export default function (state: INoteState = { list: []}, action : IAction) : INoteState {
     let noteIndex: number;
     switch (action.type) {
-        case ActionTypes.SetCurrent:
-            return {...state, current: action.note as Note}
+        /*case ActionTypes.SetCurrent:
+            return {...state, current: action.note as Note}*/
         case ActionTypes.UpdateList:
             return {...state, list: action.list as Note[]};
         case ActionTypes.RemoveNote:

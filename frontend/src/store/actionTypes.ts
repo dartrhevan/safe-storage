@@ -1,5 +1,5 @@
 export enum ActionTypes {
-    SetCurrent,
+    //SetCurrent,
     UpdateList,
     RemoveNote,
     EditNote,

@@ -48,7 +48,7 @@ export default function ({ close }: IProps) {
             }).then(res => {
                     const resp = res as Response;
                     console.log(resp)
-                    if(!resp || resp.status !== 200)
+                    if(!res || resp.status !== 200)
                         alert('Error!');
                     else
                     return resp.json();
