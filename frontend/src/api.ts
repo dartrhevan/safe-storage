@@ -48,7 +48,7 @@ export function editNote(note: NoteDTO) {
     body.append("id", note.id as string);
     body.append("head", note.head);
     body.append("text", note.text as string);
-    body.append("date", note.date?.toISOString() as string);
+    body.append("date", /*`${note?.date?.getFullYear()??2020}-${note?.date?.getMonth()??'08'}-${note?.date?.getDay()??'01'}`*/note?.date?.toISOString() as string);
     return fetch('/api/note',
         {
             method: "PUT",

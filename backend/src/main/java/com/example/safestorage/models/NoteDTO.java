@@ -1,5 +1,7 @@
 package com.example.safestorage.models;
 
+import ch.qos.logback.core.util.SystemInfo;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -8,7 +10,7 @@ public class NoteDTO implements Serializable {
     private String head;
     private String text;
     private String id;
-    private Date date;
+    private String date;
 
     @Override
     public boolean equals(Object o) {
@@ -26,7 +28,7 @@ public class NoteDTO implements Serializable {
         return Objects.hash( head, text, id, date );
     }
 
-    public NoteDTO(String head, String text, String id, Date date) {
+    public NoteDTO(String head, String text, String id, String date) {
         this.head = head;
         this.text = text;
         this.id = id;
@@ -49,11 +51,11 @@ public class NoteDTO implements Serializable {
         this.text = text;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

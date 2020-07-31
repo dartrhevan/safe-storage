@@ -1,5 +1,6 @@
 package com.example.safestorage.models;
 
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -26,7 +27,7 @@ public class Note implements Serializable {
         return Objects.hash( id, encodedHeader, encodedText );
     }
 
-    public Note(byte[] encodedHeader, byte[] encodedText, String ownerId, Date addingDate) {
+    public Note(byte[] encodedHeader, byte[] encodedText, String ownerId, DateTime addingDate) {
         this.encodedHeader = encodedHeader;
         this.encodedText = encodedText;
         this.ownerId = ownerId;
@@ -73,7 +74,7 @@ public class Note implements Serializable {
     private byte[] encodedHeader;
     private byte[] encodedText;
     private String ownerId;
-    private Date addingDate;
+    private DateTime addingDate;
 
     public String getOwnerId() {
         return ownerId;
@@ -83,11 +84,11 @@ public class Note implements Serializable {
         this.ownerId = ownerId;
     }
 
-    public Date getAddingDate() {
+    public DateTime getAddingDate() {
         return addingDate;
     }
 
-    public void setAddingDate(Date addingDate) {
+    public void setAddingDate(DateTime addingDate) {
         this.addingDate = addingDate;
     }
 

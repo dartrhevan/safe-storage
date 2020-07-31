@@ -2,6 +2,7 @@ package com.example.safestorage;
 
 import com.example.safestorage.models.NoteDTO;
 import com.example.safestorage.services.*;
+import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
@@ -26,7 +27,7 @@ public class EncodingTests {
     @Test
     void noteEncodeTest() {
         var ownerId = "123";
-        var noteDTO = new NoteDTO( "head", "text", null, new Date() );
+        var noteDTO = new NoteDTO( "head", "text", null, "" );
         var note = noteEncoder.encode( noteDTO, ownerId );
         var decodedNoteDTO = noteEncoder.decode( note );
         assert decodedNoteDTO.equals( noteDTO );
