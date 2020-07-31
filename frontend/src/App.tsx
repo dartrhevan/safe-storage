@@ -23,8 +23,9 @@ import {useStore, useDispatch} from 'react-redux';
 import AdaptiveDrawer from './components/AdaptiveDrawer';
 import Note from './model/Note';
 import INoteState from './store/Note/INoteState';
-import { getNoteDetails, editNote, removeNote } from './api';
+import { getNoteDetails, editNote, removeNote, addNote, listNotes } from './api';
 import { TextareaAutosize } from '@material-ui/core';
+import { UpdateList } from './store/Note/actions';
 //import store from './store/store';
 
 const drawerWidth = 300;
@@ -95,23 +96,41 @@ function App() {
         setText("text");
     }
 
+
+    function updateList() {
+        listNotes().then(res => {///TODO: extract hook
+            const resp = res as Response;
+            console.log(resp)
+            if(!res || resp.status !== 200)
+                alert('Error!');
+            else
+                return resp.json();
+        }).then(list => dispatch(UpdateList(list)));///
+    }
+
     function onSave() {
         if(currentNote) { //edit note
             currentNote.head = head;
             currentNote.text = text;
             currentNote.date = new Date();
-            editNote(currentNote);
-            //TODO: updateList
+            editNote(currentNote)
+                .then(r => updateList());
         }
         else {// add new note
-            //TODO:
+            /*currentNote.head = head;
+            currentNote.text = text;
+            currentNote.date = new Date();*/
+            addNote(new Note(head, text, null, new Date()))
+                .then(r => updateList());
         }
+        onCancel();
     }
 
     function deleteNote() {
         if(currentNote)
             removeNote(currentNote.id as string)
-        //TODO: update list
+                .then(r => updateList());
+        onCancel();
     }
     //useEffect(...)
     //getUsername from api
@@ -138,6 +157,7 @@ function App() {
                 setHead(note?.head);
         });
     }
+
 
     console.log(store.getState());
 
@@ -202,6 +222,7 @@ function App() {
                             color="primary">
                             Cancel</Button>
                     </Toolbar>
+                    Last update: {currentNote?.date}
                     {/*currentNote ? (currentNote as Note).text : "PlaceHolder"*/}
                 </Typography>
             </div>
