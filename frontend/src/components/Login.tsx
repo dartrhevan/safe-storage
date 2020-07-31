@@ -41,18 +41,20 @@ export default function ({ close }: IProps) {
                 else {
                     dispatch(setStateUsername(username));
                     console.log(store.getState());
-
                     close();
-                    return listNotes();
+                    listNotes()
+                        .then(res => {///TODO: extract hook
+                            const resp = res as Response;
+                            console.log(resp)
+                            if(!res || resp.status !== 200) {
+                                alert('Error!');
+                                return null;
+                            }
+                            else
+                                return resp.json();
+                        }).then(list => dispatch(UpdateList(list)));///
                 }
-            }).then(res => {///TODO: extract hook
-                    const resp = res as Response;
-                    console.log(resp)
-                    if(!res || resp.status !== 200)
-                        alert('Error!');
-                    else
-                    return resp.json();
-            }).then(list => dispatch(UpdateList(list)));///
+            })
     }
 
     function handleChangePassword(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {

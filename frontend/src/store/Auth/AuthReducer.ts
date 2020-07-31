@@ -15,7 +15,7 @@ export default function (state : IAuthState = {username: null}, action : IAction
         case ActionTypes.SetUsername:
             return {...state, username: action.username}
         case ActionTypes.Logout:
-            return {...state, username: null}
+            return {...state, username: ""}
         default: return state;
     }
 }

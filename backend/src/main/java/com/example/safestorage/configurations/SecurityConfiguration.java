@@ -12,9 +12,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;/*
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;*/
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
@@ -48,34 +50,41 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/note/**", "/api/note/list" ).authenticated();
 
         http.authorizeRequests()
-                //.anyRequest()
                 .antMatchers( "/")
-                .permitAll();//.authenticated()
-                //.and().httpBasic();
-        http.headers().frameOptions().sameOrigin().and();
-        http.csrf().disable();
+                .permitAll()//.authenticated()
+                .and().httpBasic()
+                .disable();
+        http.headers()
+                .frameOptions()
+                .sameOrigin()
+                .and()
+                .csrf()
+                .disable();
+
         http.formLogin()
-                /**.successHandler( (httpServletRequest, httpServletResponse, authentication) -> {
-                    httpServletResponse.setStatus( 200 );
-                } )*/
+                .successHandler( (httpServletRequest, httpServletResponse, authentication) ->
+                                         httpServletResponse.setStatus( 200 ) )
+                .failureHandler( (httpServletRequest, httpServletResponse, e) ->
+                                         httpServletResponse.setStatus( 401 ) )
                 .permitAll()
-                //.loginPage("/login")
                 .loginProcessingUrl("/api/login")
                 .successForwardUrl( "/api/after-login" )
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .permitAll();
-        http.logout()
+                .permitAll().and()
+
+                .logout()
                 // разрешаем делать логаут всем
                 .permitAll()
                 // указываем URL логаута
                 .logoutUrl("/api/logout")
-                // указываем URL при удачном логауте
-                //.logoutSuccessUrl("/login?logout")
-                // делаем не валидной текущую сессию
-                .invalidateHttpSession(true);
+                .logoutSuccessHandler( (httpServletRequest, httpServletResponse, authentication) ->
+                                               httpServletResponse.setStatus( 200 ) )
 
-        http.rememberMe().key("uniqueAndSecret");//.tokenRepository(persistentTokenRepository());
+                // делаем не валидной текущую сессию
+                .invalidateHttpSession(true).and()
+
+                .rememberMe().key("uniqueAndSecret");//.tokenRepository(persistentTokenRepository());
     }
 
 }

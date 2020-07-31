@@ -23,9 +23,10 @@ import {useStore, useDispatch} from 'react-redux';
 import AdaptiveDrawer from './components/AdaptiveDrawer';
 import Note from './model/Note';
 import INoteState from './store/Note/INoteState';
-import { getNoteDetails, editNote, removeNote, addNote, listNotes } from './api';
+import { getNoteDetails, editNote, removeNote, addNote, listNotes, logout } from './api';
 import { TextareaAutosize } from '@material-ui/core';
 import { UpdateList } from './store/Note/actions';
+import { Logout } from './store/Auth/actions';
 //import store from './store/store';
 
 const drawerWidth = 300;
@@ -76,6 +77,7 @@ function App() {
     //const text = currentNote?.text;
     store.subscribe(() => {
         setNotes(store.getState().notes);
+        setOpenDialog(store.getState().auth.username === '');
     });
 
     function onTextChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -158,6 +160,14 @@ function App() {
         });
     }
 
+    function handleLogout() {
+        logout().then(r => {
+            dispatch(Logout());
+            dispatch(UpdateList([]));
+            setText("");
+            setHead("");
+        });
+    }
 
     console.log(store.getState());
 
@@ -176,6 +186,7 @@ function App() {
                     </Typography>
                     <Button className={classes.button}
                             variant="contained"
+                            onClick={handleLogout}
                             color="primary">Logout</Button>
                 </Toolbar>
             </AppBar>
