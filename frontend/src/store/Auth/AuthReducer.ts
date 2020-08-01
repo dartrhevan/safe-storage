@@ -7,14 +7,19 @@ interface IAction {
 }
 
 interface IAuthState {
-    username: string | null
+    username: string
 }
 
-export default function (state : IAuthState = {username: null}, action : IAction): IAuthState {
+const loginKey = 'login';
+
+export default function (state : IAuthState = {username: ""}, action : IAction): IAuthState {
     switch (action.type) {
         case ActionTypes.SetUsername:
+            if(action.username !== "")
+                sessionStorage.setItem(loginKey, action.username);
             return {...state, username: action.username}
         case ActionTypes.Logout:
+            sessionStorage.removeItem(loginKey)
             return {...state, username: ""}
         default: return state;
     }

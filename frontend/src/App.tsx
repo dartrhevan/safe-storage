@@ -141,31 +141,25 @@ function App() {
             .then((r: void | Response) => {
                 const resp = r as Response;
                 console.log(resp)
-                if(r && resp.status === 200) {
-                    resp.text().then(username => {
-
-                        dispatch(setStateUsername(username));
-                        console.log(store.getState());
-                        //close();
-                        onCloseDialog();
-                        return listNotes();
-                    }).then(res => {///TODO: extract hook
+                return r && resp.status === 200 ? resp.text() : "";
+            }).then(username => {
+                dispatch(setStateUsername(username));
+                if(username !== "") {
+                    console.log(store.getState());
+                    onCloseDialog();
+                    listNotes().then(res => {///TODO: extract hook
                         const resp = res as Response;
                         console.log(resp)
-                        if(!res || resp.status !== 200) {
-                            alert('Error!');
+                        if (!res || resp.status !== 200) {
+                            alert('Autolist Error!');
                             return null;
                         }
                         else
                             return resp.json();
-                    }).then(list => dispatch(UpdateList(list)));///
+                    }).then(list => dispatch(UpdateList(list)));///;
                 }
             })
-    })
-
-    //useEffect(...)
-    //getUsername from api
-    //
+    }, [])
 
     const dispatch = useDispatch();
 
@@ -222,10 +216,8 @@ function App() {
             <div>
                 <AdaptiveDrawer open={openDrawer}>
                     <List>
-                        {notes && notes.list.map((note: Note, index: number) => (
+                        {notes.list && notes.list.map((note: Note, index: number) => (
                             <ListItem onClick={onItemClick} id={note.id as string} button key={note.id as string}>
-                                {/*<ListItemIcon><MailIcon/></ListItemIcon>
-                                <ListItemText primary={note.head}/>*/}
                                 {note.head}
                             </ListItem>
                         ))}
@@ -263,7 +255,6 @@ function App() {
                             Cancel</Button>
                     </Toolbar>
                     Last update: {currentNote?.date}
-                    {/*currentNote ? (currentNote as Note).text : "PlaceHolder"*/}
                 </Typography>
             </div>
         </div>

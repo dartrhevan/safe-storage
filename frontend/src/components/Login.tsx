@@ -37,7 +37,7 @@ export default function ({ close }: IProps) {
                 const resp = r as Response;
                 console.log(resp)
                 if(!resp || resp.status !== 200)
-                    alert('Error!');
+                    alert('Auth Error!');
                 else {
                     dispatch(setStateUsername(username));
                     console.log(store.getState());
@@ -47,7 +47,7 @@ export default function ({ close }: IProps) {
                             const resp = res as Response;
                             console.log(resp)
                             if(!res || resp.status !== 200) {
-                                alert('Error!');
+                                alert('List Error!');
                                 return null;
                             }
                             else
