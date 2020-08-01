@@ -23,7 +23,7 @@ export function registration(username: string, password: string) {
 }
 
 export function getUsername() {
-    return fetch('/api/get-username').catch(console.log)
+    return fetch('/api/get-login').catch(console.log)
 }
 
 export function logout() {

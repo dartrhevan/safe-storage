@@ -1,4 +1,4 @@
-import React, {MouseEvent, ChangeEvent} from 'react';
+import React, {MouseEvent, ChangeEvent, useEffect } from 'react';
 import clsx from 'clsx';
 import {
     AppBar,
@@ -21,9 +21,10 @@ import MailIcon from '@material-ui/icons/Mail';
 import AuthDialog from "./components/AuthDialog";
 import {useStore, useDispatch} from 'react-redux';
 import AdaptiveDrawer from './components/AdaptiveDrawer';
+import {setUsername as setStateUsername} from './store/Auth/actions';
 import Note from './model/Note';
 import INoteState from './store/Note/INoteState';
-import { getNoteDetails, editNote, removeNote, addNote, listNotes, logout } from './api';
+import { getNoteDetails, editNote, removeNote, addNote, listNotes, logout, getUsername } from './api';
 import { TextareaAutosize } from '@material-ui/core';
 import { UpdateList } from './store/Note/actions';
 import { Logout } from './store/Auth/actions';
@@ -134,6 +135,34 @@ function App() {
                 .then(r => updateList());
         onCancel();
     }
+
+    useEffect(() => {
+        getUsername()
+            .then((r: void | Response) => {
+                const resp = r as Response;
+                console.log(resp)
+                if(r && resp.status === 200) {
+                    resp.text().then(username => {
+
+                        dispatch(setStateUsername(username));
+                        console.log(store.getState());
+                        //close();
+                        onCloseDialog();
+                        return listNotes();
+                    }).then(res => {///TODO: extract hook
+                        const resp = res as Response;
+                        console.log(resp)
+                        if(!res || resp.status !== 200) {
+                            alert('Error!');
+                            return null;
+                        }
+                        else
+                            return resp.json();
+                    }).then(list => dispatch(UpdateList(list)));///
+                }
+            })
+    })
+
     //useEffect(...)
     //getUsername from api
     //
@@ -193,7 +222,7 @@ function App() {
             <div>
                 <AdaptiveDrawer open={openDrawer}>
                     <List>
-                        {notes.list.map((note: Note, index: number) => (
+                        {notes && notes.list.map((note: Note, index: number) => (
                             <ListItem onClick={onItemClick} id={note.id as string} button key={note.id as string}>
                                 {/*<ListItemIcon><MailIcon/></ListItemIcon>
                                 <ListItemText primary={note.head}/>*/}
