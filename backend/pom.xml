@@ -77,21 +77,19 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-        </plugins>
+        </plugins><!--
         <resources>
             <resource>
                 <excludes>
-                    <!--<exclude>../frontend/node_modules/*.*</exclude>-->
                     <exclude>/frontend/node_modules/*.*</exclude>
                     <exclude>**/node_modules/*.*</exclude>
 
-                   <!-- <exclude>../frontend/node_modules/**</exclude>-->
                     <exclude>/frontend/node_modules/**</exclude>
                     <exclude>**/node_modules/**</exclude>
 
                 </excludes>
             </resource>
-        </resources>
+        </resources>-->
     </build>
 
 </project>

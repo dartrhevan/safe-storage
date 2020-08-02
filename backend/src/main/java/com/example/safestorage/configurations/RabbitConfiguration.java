@@ -7,20 +7,33 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 
+@PropertySource("classpath:application.properties")
 @EnableRabbit
 @Configuration
 public class RabbitConfiguration {
+    @Autowired
+    public RabbitConfiguration(@Value( "${rabbitHost}" ) String rabbitHost) {
+        this.rabbitHost = rabbitHost;
+    }
+
     //настраиваем соединение с RabbitMQ
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory =
-                new CachingConnectionFactory("192.168.99.100");//TODO: extract
+                new CachingConnectionFactory(rabbitHost);
         return connectionFactory;
     }
+
+    private final String rabbitHost;
+
+    private static final String EXCHANGE_NAME = "safe-storage-exchange";
 
     @Bean
     public AmqpAdmin amqpAdmin() {
@@ -30,13 +43,13 @@ public class RabbitConfiguration {
     @Bean
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
-        rabbitTemplate.setExchange("safe-storage-exchange");//TODO: extract
+        rabbitTemplate.setExchange(EXCHANGE_NAME);
         return rabbitTemplate;
     }
 
     @Bean
     public DirectExchange getDirectExchange(){
-        return new DirectExchange("safe-storage-exchange");
+        return new DirectExchange(EXCHANGE_NAME);
     }
 
     @Bean
