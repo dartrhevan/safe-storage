@@ -18,7 +18,11 @@ const useStyles = makeStyles({
     }
 });
 
-export default function () {
+interface IProps {
+    alert: (m: string)=>void
+}
+
+export default function ({alert} : IProps) {
 
     const classes = useStyles();
 
@@ -53,7 +57,7 @@ export default function () {
                 else
                     return resp.text();
             })
-            .then(t => alert(t === "" ? "Succes" : t))
+            .then(t => alert(t === "" ? "Succes" : t as string))
     }
 
     return (<Container>

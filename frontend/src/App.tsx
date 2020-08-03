@@ -1,4 +1,4 @@
-import React, {MouseEvent, ChangeEvent, useEffect } from 'react';
+import React, {MouseEvent, ChangeEvent, useEffect, SyntheticEvent } from 'react';
 import clsx from 'clsx';
 import {
     AppBar,
@@ -11,7 +11,8 @@ import {
     ListItemText,
     Toolbar,
     Typography,
-    TextField
+    TextField,
+    Snackbar
 } from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles'
 import MenuIcon from '@material-ui/icons/Menu';
@@ -28,6 +29,7 @@ import { getNoteDetails, editNote, removeNote, addNote, listNotes, logout, getUs
 import { TextareaAutosize } from '@material-ui/core';
 import { UpdateList } from './store/Note/actions';
 import { Logout } from './store/Auth/actions';
+import { Alert } from '@material-ui/lab';
 //import store from './store/store';
 
 const drawerWidth = 300;
@@ -67,10 +69,10 @@ function App() {
     const [openDrawer, setOpenDrawer] = React.useState(true);
 
     const store = useStore();
-    const [openDialog, setOpenDialog] = React.useState(store.getState().auth.username === '');
+    const [openDialog, setOpenDialog] = React.useState<boolean>(store.getState().auth.username === '');
     const [notes, setNotes] = React.useState<INoteState>(store.getState().notes);
 
-
+    const [alertMessage, setAlertMessage] = React.useState<string | null>(null);
     const [currentNote, setCurrentNote] = React.useState<Note | null>(null);
     const [head, setHead] = React.useState<string>((currentNote?.head) as string);
     //const head = currentNote?.head;
@@ -99,9 +101,12 @@ function App() {
         setText("text");
     }
 
+    function alert(message: string) {
+        setAlertMessage(message);
+    }
 
     function updateList() {
-        listNotes().then(res => {///TODO: extract hook
+        return listNotes().then(res => {///TODO: extract hook
             const resp = res as Response;
             console.log(resp)
             if(!res || resp.status !== 200)
@@ -223,7 +228,12 @@ function App() {
                         ))}
                     </List>
                 </AdaptiveDrawer>
-                <AuthDialog open={openDialog} close={onCloseDialog}/>
+                <AuthDialog alert={alert} open={openDialog} close={onCloseDialog}/>
+                <Snackbar open={alertMessage !== null} autoHideDuration={6000} >
+                    <Alert severity="info" onClose={(event: SyntheticEvent<Element, Event>) => setAlertMessage(null)}>
+                        {alertMessage}
+                    </Alert>
+                </Snackbar>
                 <Typography className={clsx(classes.content, {[classes.contentShift]: openDrawer })}>
                     <Toolbar />
                     <TextField onChange={onHeadChange} className={classes.field} variant="outlined" value={head??"head"} label="head" fullWidth />

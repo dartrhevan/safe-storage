@@ -22,9 +22,10 @@ const useStyles = makeStyles({
 
 interface IProps {
     close: ()=>void
+    alert: (m: string)=>void
 }
 
-export default function ({ close }: IProps) {
+export default function ({ close, alert }: IProps) {
     const classes = useStyles();
     const [username, setUsername] = React.useState<string>("");
     const [password, setPassword] = React.useState<string>("");
