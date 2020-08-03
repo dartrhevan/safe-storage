@@ -27,9 +27,11 @@ public class EncodingTests {
     @Test
     void noteEncodeTest() {
         var ownerId = "123";
-        var noteDTO = new NoteDTO( "head", "text", null, "" );
+        var noteDTO = new NoteDTO( "head", "text", null, null );
         var note = noteEncoder.encode( noteDTO, ownerId );
         var decodedNoteDTO = noteEncoder.decode( note );
+        System.out.println(noteDTO);
+        System.out.println(decodedNoteDTO);
         assert decodedNoteDTO.equals( noteDTO );
         assert ownerId.equals( note.getOwnerId() );
     }
@@ -41,6 +43,8 @@ public class EncodingTests {
         var noteDTO = new NoteDTO( "head", null, null, null );
         var note = noteEncoder.encode( noteDTO, ownerId );
         var decodedNoteDTO = noteEncoder.decode( note );
+        System.out.println(noteDTO);
+        System.out.println(decodedNoteDTO);
         assert decodedNoteDTO.equals( noteDTO );
         assert ownerId.equals( note.getOwnerId() );
     }

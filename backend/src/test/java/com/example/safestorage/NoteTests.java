@@ -3,15 +3,11 @@ package com.example.safestorage;
 import com.example.safestorage.models.Note;
 import com.example.safestorage.services.NoteService;
 import com.example.safestorage.services.UserService;
-import org.junit.After;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-@SpringBootTest
+//@SpringBootTest
 public class NoteTests {
 
     private final NoteService noteService;
@@ -22,14 +18,14 @@ public class NoteTests {
 
     private Note entity;
 
-    @Autowired
+    //@Autowired
     NoteTests(NoteService noteService, UserService userService, MongoTemplate template) {
         this.noteService = noteService;
         this.userService = userService;
         this.template = template;
     }
 
-    @Test
+    //@Test
     void getDetailsTest() {
         var note = new Note(new byte[] {4}, new byte[] {4, 5}, "123", null);
         noteService.saveNote( note );
@@ -39,7 +35,7 @@ public class NoteTests {
         assert entity2.equals( entity );
     }
 
-    @After
+    //@AfterEach
     public void cleaning() {
         if(entity != null)
             noteService.removeNote( entity.getId(), entity.getOwnerId() );

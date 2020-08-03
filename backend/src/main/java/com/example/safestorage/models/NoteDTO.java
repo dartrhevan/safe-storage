@@ -13,6 +13,16 @@ public class NoteDTO implements Serializable {
     private String date;
 
     @Override
+    public String toString() {
+        return "NoteDTO{" +
+                "head='" + head + '\'' +
+                ", text='" + text + '\'' +
+                ", id='" + id + '\'' +
+                ", date='" + date + '\'' +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof NoteDTO)) return false;

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-@PropertySource("classpath:application.properties")
+@PropertySource(value="classpath:application.properties",  ignoreResourceNotFound=true)
 @Configuration
 public class MongoConfiguration {
 

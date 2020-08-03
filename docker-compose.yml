@@ -1,0 +1,23 @@
+version: '2.0'
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      - mongoUrl=mongodb://mongodb:27017
+      - mongoDbName=test #safe-storage
+      - rabbitHost=rabbitmq #192.168.99.100 #127.0.0.1

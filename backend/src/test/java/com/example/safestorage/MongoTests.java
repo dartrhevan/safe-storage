@@ -11,10 +11,13 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-@SpringBootTest
+/**
+ * These tests were used to discover facilities of MongoTemplate
+ */
+//@SpringBootTest
 class MongoTests {
 
-    private final NoteService noteService;
+    //private final NoteService noteService;
 
     private final UserService userService;
 
@@ -22,14 +25,14 @@ class MongoTests {
 
     private User entity;
 
-    @Autowired
-    MongoTests(NoteService noteService, UserService userService, MongoTemplate template) {
-        this.noteService = noteService;
+    //@Autowired
+    MongoTests(UserService userService, MongoTemplate template) {
+        //this.noteService = noteService;
         this.userService = userService;
         this.template = template;
     }
 
-    @Test
+    //@Test
     void mongoSimpleTest() throws Exception {
         assert userService.getClass().equals( UserServiceImpl.class );
         var name = "dsad";
@@ -41,7 +44,7 @@ class MongoTests {
         assert pass.equals( entity.getPasswordHash() );
     }
 
-    @Test
+    //@Test
     void mongoExcludeTest() throws Exception {
         var name = "dsad";
         var pass = "ewf";
@@ -55,21 +58,21 @@ class MongoTests {
         assert entity2.getUsername() == null;
     }
 
-    @Test
+    //@Test
     void getUserTest() {
         var entity = template.findById( "5f1ec5cdefd8ff5e799e6c94", User.class );
         System.out.println(entity);
         assert entity != null;
     }
 
-    @Test
+    //@Test
     void getNoteTest() {
         var entity = template.findById( "5f1ec8acf87dff6bc91bad21", Note.class );
         System.out.println(entity);
         assert entity != null;
     }
 
-    @After
+    //@After
     public void cleaning() {
         if(entity != null)
             userService.removeUser( entity.getId() );

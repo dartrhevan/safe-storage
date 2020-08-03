@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 
-@PropertySource("classpath:application.properties")
+@PropertySource(value="classpath:application.properties",  ignoreResourceNotFound=true)
 @EnableRabbit
 @Configuration
 public class RabbitConfiguration {

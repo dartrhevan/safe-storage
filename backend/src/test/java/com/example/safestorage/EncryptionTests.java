@@ -30,7 +30,7 @@ public class EncryptionTests {
             encryptIteration();
         var end =  System.currentTimeMillis();
         var time = end - begin;
-        assert time < 25;
+        assert time < 150;
         System.out.println(time);
     }
 

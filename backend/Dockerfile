@@ -14,4 +14,5 @@ WORKDIR /usr/src/app/backend
 
 COPY --from=builder /usr/src/app/backend/target/safe-storage-0.0.1-SNAPSHOT.jar .
 #TODO: change jar name
-ENTRYPOINT [ "java -Dserver.port=$PORT $JAVA_OPTS -jar safe-storage-0.0.1-SNAPSHOT.jar" ]
+ENTRYPOINT java -Dserver.port=8080 -jar safe-storage-0.0.1-SNAPSHOT.jar
+#ENTRYPOINT [ "java -Dserver.port=$PORT $JAVA_OPTS -jar safe-storage-0.0.1-SNAPSHOT.jar" ]
