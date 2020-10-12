@@ -14,12 +14,10 @@ import java.util.List;
 public class NoteServiceImpl implements NoteService {
 
     private final MongoTemplate template;
-    //private final NoteEncoder encodingService;
 
     @Autowired
     public NoteServiceImpl(MongoTemplate template) {
         this.template = template;
-        //this.encodingService = encodingService;
     }
 
     @Override
@@ -34,14 +32,12 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public void editNote(Note newNote) {//change somehow??
-        //var note = template.findById( newNote.getId(), Note.class );
-        template.save( newNote/*encodingService.encode( newNote, note.getOwnerId() )*/ );
+        template.save( newNote );
     }
 
     @Override
     public List<Note> listNotes(String userId) {
         var query = Query.query( Criteria.where( "ownerId" ).is(userId));
-        //encodingService.setKey( userId );
         query.fields().exclude( "encodedText" ).exclude( "addingDate" );
         var result = template.find( query, Note.class );
         System.out.println(result);
@@ -50,7 +46,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public Note getNoteDetails(String noteId) {
-        var note = template.findById(noteId, Note.class );//findOne( Query.query( Criteria.where( "id" ).is( new ObjectId(noteId) ) ), Note.class );
+        var note = template.findById(noteId, Note.class );
         System.out.println(note);//Here is null....
         return note;
     }
