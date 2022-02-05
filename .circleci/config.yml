@@ -20,7 +20,7 @@ jobs:
     # A list of available CircleCI Docker Convenience Images are available here: https://circleci.com/developer/images/image/cimg/openjdk
     docker:
       - image: cimg/openjdk:14.0
-    working_directory: /tmp
+    #working_directory: /tmp
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
@@ -36,9 +36,9 @@ jobs:
           command: mvn $MVN_ARGS test
       - run:
           name: ls
-          command: ls /tmp/safe-storage/target
+          command: ls backend/target
       - store_artifacts:
-          path: /tmp/safe-storage/target
+          path: backend/target
           destination: backend.jar
 
   build-frontend:
