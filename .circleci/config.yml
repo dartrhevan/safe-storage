@@ -34,11 +34,8 @@ jobs:
       - run:
           name: Test
           command: mvn $MVN_ARGS test
-      - run:
-          name: ls
-          command: ls backend/target
       - store_artifacts:
-          path: backend/target
+          path: backend/target/safe-storage-0.0.1-SNAPSHOT.jar
           destination: backend.jar
 
   build-frontend:
