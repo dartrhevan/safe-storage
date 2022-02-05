@@ -47,10 +47,10 @@ jobs:
       # The orb install-packages step will also automatically cache them for faster future runs.
       - run:
           name: Install
-          command: npm install --prefix frontend package
+          command: npm install --prefix frontend
       - run:
           name: Build
-          command: npm run build --prefix frontend package
+          command: npm run build --prefix frontend
       - run:
           name: Run tests
           command: npm test
